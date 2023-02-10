@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Login</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport"
+		content="width=device-width, user-scalable=no,
+			initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+	<h:outputStylesheet name="minimarketdemo" library="css"></h:outputStylesheet>
+</h:head>
+<body>
+	<div align="center">
+		<p:messages>
+			<p:autoUpdate />
+		</p:messages>
+		<h:form>
+			<p:panel>
+				<p:panelGrid columns="2">
+					<h:outputText value="Id de usuario:" />
+					<p:inputText value="#{beanSegLogin.idSegUsuario}" />
+					<h:outputText value="Clave:" />
+					<p:password value="#{beanSegLogin.clave}" />
+					
+					<p:commandButton value="Login"
+						action="#{beanSegLogin.actionLogin()}" icon="pi pi-key"></p:commandButton>
+					<p:graphicImage name="primefaces-logo.svg" library="images"></p:graphicImage>
+				</p:panelGrid>
+			</p:panel>
+		</h:form>
+		<h:form>
+			<p:panel>
+				<p:panelGrid columns="2">
+					<h:outputText value="Inicializar datos" />
+					<p:commandButton value="Inicializar"
+						actionListener="#{beanSegLogin.actionListenerInicialiarDemo()}"
+						icon="pi pi-cog">
+						<p:confirm type="popup" header="Confirmation"
+							message="Desea inicializar datos?"
+							icon="pi pi-exclamation-triangle" />
+					</p:commandButton>
+				</p:panelGrid>
+			</p:panel>
+		</h:form>
+	</div>
+	<p:confirmPopup global="true">
+		<p:commandButton value="No" type="button"
+			styleClass="ui-confirm-popup-no ui-button-flat" />
+		<p:commandButton value="Sí" type="button"
+			styleClass="ui-confirm-popup-yes" />
+	</p:confirmPopup>
+</body>
+</html>
