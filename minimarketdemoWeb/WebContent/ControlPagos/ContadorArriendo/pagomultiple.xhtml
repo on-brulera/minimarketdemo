@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Pago Multiple</title>
+</h:head>
+<body>
+	<p:growl>
+		<p:autoUpdate />
+	</p:growl>
+
+	<p:panel>
+		<h:form>
+			<p:menubar>
+				<p:menuitem value="Regresar" icon="pi pi-home"
+					action="/menu?faces-redirect=true" />
+				<p:menuitem value="Un pago" icon="pi pi-stop"
+					action="#{beanArriendo.actionMenuUnPago()}" />
+				<p:menuitem value="Pago Múltiple" icon="pi pi-table"
+					action="#{beanArriendo.actionMenuMultiplePago()}" />
+				<p:menuitem value="Abonos" icon="pi pi-wallet"
+					action="#{beanArriendo.actionMenuAbono()}" />
+			</p:menubar>
+
+			<div style="margin-top: 15px;">
+				<h3>Control de Pagos Múltiples</h3>
+			</div>
+		</h:form>
+	</p:panel>
+</body>
+</html>
