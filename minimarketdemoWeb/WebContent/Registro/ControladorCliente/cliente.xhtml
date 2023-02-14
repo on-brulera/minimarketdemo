@@ -2,13 +2,88 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html"> 
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"> 
 
 <h:head></h:head> 
 <body> 
-	<h1>CONTROL DE CLIENTES</h1>
-	<h2>Compartan</h2>
-	<h2>Compartan</h2>
-	<h2>Compartan</h2>
+	<h:form id="form2">
+		<h1>CONTROL DE CLIENTES</h1>
+		<h:outputText value="CEDULA: " />
+		<p:inputText value="#{beanRegistro.codigo}"></p:inputText>
+		<h:outputText value="APELLIDOS: " />
+		<p:inputText value="#{beanRegistro.apellidos}"></p:inputText>
+		<h:outputText value="NOMBRES: " />
+		<p:inputText value="#{beanRegistro.nombres}"></p:inputText>
+		<h:outputText value="CORREO: " />
+		<p:inputText value="#{beanRegistro.correo}"></p:inputText>
+		<p:commandButton value="REGISTRAR" update="@form"
+					actionListener="#{beanRegistro.actionListenerAgregarCliente()}" />
+					
+		<p:panel header="Datos Clientes">
+			<p:dataTable value="#{beanRegistro.listaClientes}" var="c"
+				reflow="true">
+				<p:column headerText="ID">
+					<h:outputText value="#{c.idSegUsuario}" />
+				</p:column>
+				<p:column headerText="CEDULA">
+					<h:outputText value="#{c.codigo}" />
+				</p:column>
+				<p:column headerText="APELLIDOS">
+					<h:outputText value="#{c.apellidos}" />
+				</p:column>
+				<p:column headerText="NOMBRE">
+					<h:outputText value="#{c.nombres}" />
+				</p:column>
+				<p:column headerText="CORREO">
+					<h:outputText value="#{c.correo}" />
+				</p:column>
+				<p:column headerText="OPCIONES" priority="1">
+					<p:commandButton title="Eliminar" update="@form"
+						actionListener="#{beanRegistro.actionListenerEliminarCliente(c.idSegUsuario)}"
+						></p:commandButton>
+					<p:commandButton title="Editar"
+						actionListener="#{beanRegistro.actionListenerSeleccionarCliente(c)}"
+						update=":formEdicion"
+						oncomplete="PF('dlgEdiccion').show();">
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</p:panel>
+	</h:form>
+		<p:dialog header="Editar Informacion" widgetVar="dlgEdiccion"
+		modal="true">
+		<h:form id="formEdicion">
+			<p:growl>
+				<p:autoUpdate />
+			</p:growl>
+			<h:outputText value="ID:" />
+			<h:outputText value="#{beanRegistro.clientesel.idSegUsuario}" />
+			<p:panelGrid columns="2">
+				<h:outputText value="Cedula:" />
+				<p:inputText maxlegth="10" required="true"
+					requiredMessage="Debe ingresar la cedula"
+					value="#{beanRegistro.clientesel.codigo}"></p:inputText>
+				<h:outputText value="Apellidos:" />
+				<p:inputText maxlegth="50" required="true"
+					requiredMessage="Debe ingresar los apellidos"
+					value="#{beanRegistro.clientesel.apellidos}"></p:inputText>
+				<h:outputText value="Nombres:" />
+				<p:inputText maxlegth="50" required="true"
+					requiredMessage="Debe ingresar los nombres"
+					value="#{beanRegistro.clientesel.nombres}"></p:inputText>
+				<h:outputText value="Correo:" />
+				<p:inputText maxlegth="50" required="true"
+					requiredMessage="Debe ingresar el correo"
+					value="#{beanRegistro.clientesel.correo}"></p:inputText>
+			</p:panelGrid>
+			<p:commandButton value="Actualizar" 
+					update="@form,:form2" 
+				actionListener="#{beanRegistro.actionListenerActualizarCliente()}" />
+		</h:form>
+	</p:dialog>
+	
+	
+	
 </body> 
 </html>
