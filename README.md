@@ -14,3 +14,4 @@ Tomar en cuenta las siguientes consideraciones para importar el proyecto en Ecli
 - Crear la base de datos mmarketdemo en la base de datos Postgresql con el script sql ubicado en minimarketdemoEJB/docs.
 - Crear un datasource en Wildfly denominado mmarketdemoDS.
 - Crear un datasource en el IDE Eclipse denominado mmarketdemoDS.
+- Añadir los módulos de Faicaa's Apartment.
