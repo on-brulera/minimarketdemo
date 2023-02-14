@@ -5,97 +5,101 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui">
 
-<h:head></h:head>
+<h:head>
+	<title>CONTROL DE SERVICIOS</title>
+</h:head>
 <body>
-	<h1>CONTROL DE SERVICIOS</h1>
-	<h2>gansamida</h2>
-	<h3>todo bien :V</h3>
-
-
 	<p:growl>
 		<p:autoUpdate />
 	</p:growl>
 	<h:form id="form1">
+		<p:menubar>
+			<p:menuitem value="Regresar" icon="pi pi-home" action="menu" />
+			<f:facet name="options">
+				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
+					icon="pi pi-user">
+					<p:menuitem value="Perfil" icon="pi pi-cog"></p:menuitem>
+					<p:menuitem value="Cerrar sesión" icon="pi pi-sign-out"
+						action="#{beanSegLogin.actionCerrarSesion()}"></p:menuitem>
+				</p:menuButton>
+			</f:facet>
+		</p:menubar>
+	</h:form>
+	<h:form id="form2">
 		<p:messages>
 			<p:autoUpdate />
 		</p:messages>
-		<p:panel collapsed="#{beanApartment.panelColapsado}">
+		<p:panel collapsed="#{beanServicio.panelColapsado}">
 			<f:facet name="header">
 				<p:commandButton value="Nuevo servicio" icon="pi pi-plus"
 					update="@form"
-					actionListener="#{beanApartment.actionListenerColapsarPanel()}"></p:commandButton>
+					actionListener="#{beanServicio.actionListenerColapsarPanel()}"></p:commandButton>
 			</f:facet>
 			<p:panelGrid columns="2">
-				<h:outputText value="Id:" />
-				<p:inputText value="#{beanApartment.servicio.seId}" />
 				<h:outputText value="Nombre:" />
-				<p:inputText value="#{beanApartment.servicio.seDescripcion}" />
-				<h:outputText value="Precio:" />
-				<p:spinner value="#{beanApartment.servicio.sePrecioBase}" />
+				<p:inputText value="#{beanServicio.nuevoServicio.serDescripcion}" />
+				<h:outputText value="Contenido:" />
+				<p:inputText value="#{beanServicio.nuevoServicio.serPrecioBase}" />
 				<p:commandButton value="Insertar" icon="pi pi-save"
-					update="@form,:form2"
-					actionListener="#{beanApartment.actionListenerInsertarRefrescos()}"></p:commandButton>
+					update="@form,:form2,:form3"
+					actionListener="#{beanServicio.actionListenerInsertarNuevoServicio()}"></p:commandButton>
 			</p:panelGrid>
 		</p:panel>
 	</h:form>
-	<br />
-	<h:form id="form2">
-		<p:panel header="Datos de los servicios">
-			<p:dataTable value="#{beanApartment.listaServicio}" reflow="true"
-				var="servicio" paginator="true" rows="5">
-				<p:column headerText="ID" filterBy="#{servicio.seId}"
-					filterMatchMode="contains" priority="1">
-					<h:outputText value="#{servicio.seId}" />
+	<p:panel>
+		<h:form id="form3">
+			<p:dataTable value="#{beanServicio.listaServicios}" var="servicio"
+				paginator="true" rows="5">
+				<p:column headerText="ID" style="width:50px">
+					<h:outputText value="#{servicio.serId}" />
 				</p:column>
-				<p:column headerText="NOMBRE" filterBy="#{servicio.seDescripcion}"
-					filterMatchMode="contains" priority="1">
-					<h:outputText value="#{servicio.seDescripcion}" />
+				<p:column headerText="DESCRIPCION"
+					filterBy="#{servicio.serDescripcion}" filterMatchMode="contains">
+					<h:outputText value="#{servicio.serDescripcion}" />
 				</p:column>
-				<p:column headerText="PRECIO" sortBy="#{servicio.sePrecioBase}"
-					priority="3" style="width:50px">
-					<h:outputText value="#{servicio.sePrecioBase}" />
+				<p:column headerText="PRECIO" filterBy="#{servicio.serPrecioBase}"
+					filterMatchMode="contains">
+					<h:outputText value="#{servicio.serPrecioBase}" />
 				</p:column>
-				<p:column headerText="OPCIONES" priority="1">
-					<p:commandButton icon="pi pi-times" title="eliminar" update="@form"
-						actionListener="#{beanApartment.actionListenerEliminarRefrescos(servicio.seId)}">
-						<p:confirm header="Confirmacion" message="Desea eliminar?"
-							icon="pi pi-exclamation-triangle"></p:confirm>
-					</p:commandButton>
-					<p:commandButton icon="pi pi-user-edit" title="Editar"
-						actionListener="#{beanApartment.actionListenerSeleccionarRefrescos(servicio.seId)}"
-						update=":formEdicion" oncomplete="PF('dlgEdicion').show();">
-
+				<p:column headerText="OPCIONES">
+					<p:commandButton icon="pi pi-pencil" title="editar"
+						action="#{beanServicio.actionSeleccionarEdicionServicio(servicio)}"
+						update=":formEdicion" oncomplete="PF('dlgEdicion').show();" />
+					<p:commandButton icon="pi pi-times-circle" title="eliminar"
+						styleClass="ui-button-danger" update="@form"
+						actionListener="#{beanServicio.actionListenerEliminarServicio(servicio.serId)}">
+						<p:confirm header="Confirmación"
+							message="¿Desea borrar este servicio?" icon="pi pi-info-circle" />
 					</p:commandButton>
 				</p:column>
 			</p:dataTable>
-		</p:panel>
-	</h:form>
-	<p:dialog header="Editar informacion" widgetVar="dlgEdicion"
-		modal="true">
-		<h:form id="formEdicion">
-			<p:growl>
-				<p:autoUpdate />
-			</p:growl>
-			<h:outputText value="Id: " />
-			<h:outputText value="#{beanApartment.servicioSeleccionado.seId}" />
-			<p:panelGrid columns="2">
-				<h:outputText value="Nombre:" />
-				<p:inputText
-					value="#{beanApartment.servicioSeleccionado.seDescripcion}" />
-				<h:outputText value="Precio:" />
-				<p:spinner
-					value="#{beanApartment.servicioSeleccionado.sePrecioBase}" />
-			</p:panelGrid>
-			<p:commandButton value="Actualizar" icon="pi pi-save"
-				update="@form,:form2"
-				actionListener="#{beanApartment.actionListenerActualizarRefrescos()}" />
 		</h:form>
-	</p:dialog>
-	<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-		<p:commandButton value="Si" type="button"
-			styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+		<p:dialog header="Editar informacion del Servicio" widgetVar="dlgEdicion"
+			modal="true">
+			<h:form id="formEdicion">
+				<p:growl>
+					<p:autoUpdate />
+				</p:growl>
+				<h:outputText value="Id: " />
+				<h:outputText value="#{beanServicio.edicionServicio.serId}" />
+				<p:panelGrid columns="2">
+					<h:outputText value="Nombre:" />
+					<p:inputText value="#{beanServicio.edicionServicio.serDescripcion}" />
+					<h:outputText value="Contenido:" />
+					<p:inputText value="#{beanServicio.edicionServicio.serPrecioBase}" />
+				</p:panelGrid>
+				<p:commandButton value="Actualizar" icon="pi pi-save"
+					update="@form,:form2,:form3"
+					actionListener="#{beanServicio.actionListenerActualizarEdicionServicio()}" />
+			</h:form>
+		</p:dialog>
+	</p:panel>
+	<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+		responsive="true" width="350">
 		<p:commandButton value="No" type="button"
-			styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+			styleClass="ui-confirmdialog-no ui-button-flat" />
+		<p:commandButton value="Sí" type="button"
+			styleClass="ui-confirmdialog-yes" />
 	</p:confirmDialog>
 </body>
 </html>
