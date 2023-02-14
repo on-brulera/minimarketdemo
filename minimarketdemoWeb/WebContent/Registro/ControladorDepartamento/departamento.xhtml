@@ -2,11 +2,156 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html"> 
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p= "http://primefaces.org/ui"> 
 
-<h:head></h:head> 
+<h:head>Faican's Apartment</h:head> 
 <body> 
 	<h1>CONTROL DE DEPARTAMENTOS</h1>
-	<h2>Rhinestone Eyes tin tin tin s</h2>
+	
+	
+	<p:growl>
+		<p:autoUpdate />
+	</p:growl>
+	
+	<h:form >
+	
+	<p:panel header="Registro de nuevo departamento">
+			
+			<p:panelGrid columns="2">
+		
+				
+				<h:outputText value="Buen Estado: " />
+				<h:selectBooleanCheckbox value="#{beanApartment.departamento.depEstado}" /> 
+				
+				<h:outputText value="Disponibilidad: " />
+				<h:selectBooleanCheckbox value="#{beanApartment.departamento.depDisponible}" /> 
+				
+				<h:outputText value="Garantia: " />
+				<h:inputText value="#{beanApartment.departamento.depGarantia}" />
+				
+				<h:outputText value="Precio: " />
+				<h:inputText value="#{beanApartment.departamento.depPrecio}" />
+				
+				<h:outputText value="Numero de habitaciones: " />
+				<p:spinner value="#{beanApartment.departamento.depNumCuartos}" />
+				
+				<h:outputText value="Dia de pago: " />
+				<p:spinner value="#{beanApartment.departamento.depDiaPago}" />
+				
+				<p:commandButton value="Insertar" icon="fa fa-save" 
+					actionListener="#{beanApartment.actionListenerInsertarDepartamento()}" update="@form"/>
+				
+				</p:panelGrid>
+		
+	</p:panel>
+	
+		<p:dataTable value="#{beanApartment.listaDepartamentos}" var="d">
+			
+				<p:column headerText="ID">
+					<h:outputText value="#{d.depId}" />
+				</p:column>
+				
+				<p:column headerText="En Buen Estado">
+					<h:selectBooleanCheckbox  value="#{d.depEstado}" disabled="true" />
+				</p:column>
+				
+				<p:column headerText="Disponible">
+					<h:selectBooleanCheckbox  value="#{d.depDisponible}" disabled="true"/>
+				</p:column>
+				
+				<p:column headerText="Garantia">
+					<h:outputText value="#{d.depGarantia}" />
+				</p:column>
+				
+				<p:column headerText="Numero de habitaciones">
+					<h:outputText value="#{d.depNumCuartos}" /> 
+				</p:column>
+				
+				<p:column headerText="Precio">
+					<h:outputText value="#{d.depPrecio}" />
+				</p:column>
+				
+				<p:column headerText="Dia de Pago">
+					<h:outputText value="#{d.depDiaPago}" />
+				</p:column>
+				
+				
+				<p:column headerText="OPCIONES">
+					<p:commandButton value="Editar" icon="pi pi-pencil"
+						update="@form"
+						actionListener="#{beanApartment.actionListenerSeleccionarDepartamentoEdicion(d)}" 
+						oncomplete="PF('dlgEdicion').show();"/>
+					
+					  <p:commandButton update="@form" icon="pi pi-check"
+						title="Cambiar estado alquiler"
+						actionListener="#{beanApartment.actionListenerCambiarEstadoDepartamento(d)}" />
+						
+					<p:commandButton value="Alquilar"
+						update="@form"
+						actionListener="#{beanApartment.actionListenerAlquilarDepartamento(d)}" />
+						
+					<p:commandButton icon="pi pi-trash" 
+						title="Eliminar departamento"
+						actionListener="#{beanApartment.actionListenerEliminarDepartamento(d, d.depId)}"
+						update="@form" />
+							
+				</p:column>
+				
+				
+			</p:dataTable>
+		
+	
+	
+		<p:dialog header="Editar informacion" widgetVar="dlgEdicion" modal="true">
+		
+				<p:growl>
+					<p:autoUpdate/>
+				</p:growl>
+				
+				<h:outputText value="Id: " />
+				<h:outputText value="#{beanApartment.departamentoEdicion.depId}"  />
+				
+				<p:panelGrid columns="2">
+
+				<h:outputText value="Buen Estado: " />
+				<h:selectBooleanCheckbox value="#{beanApartment.departamentoEdicion.depEstado}" /> 
+				
+				<h:outputText value="Disponibilidad: " />
+				<h:selectBooleanCheckbox value="#{beanApartment.departamentoEdicion.depDisponible}" /> 
+				
+				<h:outputText value="Garantia: " />
+				<h:inputText value="#{beanApartment.departamentoEdicion.depGarantia}" />
+				
+				<h:outputText value="Precio: " />
+				<h:inputText value="#{beanApartment.departamentoEdicion.depPrecio}" />
+				
+				<h:outputText value="Numero de habitaciones: " />
+				<p:spinner value="#{beanApartment.departamentoEdicion.depNumCuartos}" />
+				
+				<h:outputText value="Dia de pago: " />
+				<p:spinner value="#{beanApartment.departamentoEdicion.depDiaPago}" />
+				
+				
+				</p:panelGrid>
+				
+				<p:commandButton value="Actualizar"  icon="pi pi-replay"
+								 update="@form" actionListener="#{beanApartment.actionListenerActualizarDepartamento()}"/>
+			
+				
+		
+		
+		</p:dialog>
+		
+		
+		
+		
+	
+	
+	
+	
+		</h:form>
+	
 </body> 
 </html>
+
