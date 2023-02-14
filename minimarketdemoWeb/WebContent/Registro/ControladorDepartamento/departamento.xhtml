@@ -14,7 +14,7 @@
 		<p:autoUpdate />
 	</p:growl>
 	
-	<h:form >
+	<h:form id="formPrincipal">
 	
 	<p:panel header="Registro de nuevo departamento">
 			
@@ -114,33 +114,30 @@
 				
 				<p:panelGrid columns="2">
 
-				<h:outputText value="Buen Estado: " />
-				<h:selectBooleanCheckbox value="#{beanApartment.departamentoEdicion.depEstado}" /> 
+					<h:outputText value="Buen Estado: " />
+					<h:selectBooleanCheckbox value="#{beanApartment.departamentoEdicion.depEstado}" /> 
 				
-				<h:outputText value="Disponibilidad: " />
-				<h:selectBooleanCheckbox value="#{beanApartment.departamentoEdicion.depDisponible}" /> 
+					<h:outputText value="Disponibilidad: " />
+					<h:selectBooleanCheckbox value="#{beanApartment.departamentoEdicion.depDisponible}" /> 
 				
-				<h:outputText value="Garantia: " />
-				<h:inputText value="#{beanApartment.departamentoEdicion.depGarantia}" />
+					<h:outputText value="Garantia: " />
+					<h:inputText value="#{beanApartment.departamentoEdicion.depGarantia}" />
 				
-				<h:outputText value="Precio: " />
-				<h:inputText value="#{beanApartment.departamentoEdicion.depPrecio}" />
+					<h:outputText value="Precio: " />
+					<h:inputText value="#{beanApartment.departamentoEdicion.depPrecio}" />
 				
-				<h:outputText value="Numero de habitaciones: " />
-				<p:spinner value="#{beanApartment.departamentoEdicion.depNumCuartos}" />
+					<h:outputText value="Numero de habitaciones: " />
+					<p:spinner value="#{beanApartment.departamentoEdicion.depNumCuartos}" />
 				
-				<h:outputText value="Dia de pago: " />
-				<p:spinner value="#{beanApartment.departamentoEdicion.depDiaPago}" />
-				
-				
+					<h:outputText value="Dia de pago: " />
+					<p:spinner value="#{beanApartment.departamentoEdicion.depDiaPago}" />
+					
 				</p:panelGrid>
 				
 				<p:commandButton value="Actualizar"  icon="pi pi-replay"
 								 update="@form" actionListener="#{beanApartment.actionListenerActualizarDepartamento()}"/>
-			
 				
-		
-		
+	
 		</p:dialog>
 		
 		

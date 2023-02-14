@@ -81,15 +81,15 @@ public class ManagerApartment {
     	
     }
     
-    public DepDepartamento actualizarDepartamento(DepDepartamento departamentoEdicion) throws Exception {
-    	DepDepartamento a=findDepartamentoById(departamentoEdicion.getDepId());
+    public DepDepartamento actualizarDepartamento(DepDepartamento dep) throws Exception {
+    	DepDepartamento a=findDepartamentoById(dep.getDepId());
     	//if (a==null) throw new Exception("No existe departamento con dicha id");
-    	a.setDepDisponible(departamentoEdicion.getDepDisponible());
-    	a.setDepEstado(departamentoEdicion.getDepEstado());
-    	a.setDepGarantia(departamentoEdicion.getDepGarantia());
-    	a.setDepNumCuartos(departamentoEdicion.getDepNumCuartos());
-    	a.setDepPrecio(departamentoEdicion.getDepPrecio());
-    	a.setDepDiaPago(departamentoEdicion.getDepDiaPago());
+    	a.setDepDisponible(dep.getDepDisponible());
+    	a.setDepEstado(dep.getDepEstado());
+    	a.setDepGarantia(dep.getDepGarantia());
+    	a.setDepNumCuartos(dep.getDepNumCuartos());
+    	a.setDepPrecio(dep.getDepPrecio());
+    	a.setDepDiaPago(dep.getDepDiaPago());
     	
     	//Servicio s=em.find(Servicio.class, idServicioEdicion);
     	
