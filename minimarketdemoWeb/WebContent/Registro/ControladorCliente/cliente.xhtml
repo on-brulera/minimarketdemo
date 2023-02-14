@@ -7,7 +7,11 @@
 
 <h:head></h:head> 
 <body> 
+	
 	<h:form id="form2">
+		<p:menubar>
+				<p:menuitem value="Regresar" icon="pi pi-home" action="/menu?faces-redirect=true" />
+		</p:menubar>
 		<h1>CONTROL DE CLIENTES</h1>
 		<h:outputText value="CEDULA: " />
 		<p:inputText value="#{beanRegistro.codigo}"></p:inputText>
