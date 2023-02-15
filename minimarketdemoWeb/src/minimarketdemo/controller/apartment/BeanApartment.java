@@ -46,6 +46,7 @@ public class BeanApartment implements Serializable{
 	public void inicializar(){
 		listaDepartamentos=managerApartment.findAllDepartamento();
 		departamento=new DepDepartamento();
+		departamentoEdicion=new DepDepartamento();
 	}
 	
 	public void actionListenerInsertarDepartamento() throws Exception{

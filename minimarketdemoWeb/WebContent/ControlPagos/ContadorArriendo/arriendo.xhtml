@@ -1,40 +1,128 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui"> 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
 
 <h:head>
 	<title>Arriendo</title>
-</h:head> 
-<body> 
-	
+</h:head>
+<body>
+
 	<p:growl>
 		<p:autoUpdate />
 	</p:growl>
-		
+
 	<p:panel>
 		<h:form>
 			<p:menubar>
-				<p:menuitem value="Regresar" icon="pi pi-home" action="/menu?faces-redirect=true" />
+				<p:menuitem value="Regresar" icon="pi pi-home"
+					action="/menu?faces-redirect=true" />
+				<p:menuitem value="Un pago" icon="pi pi-stop"
+					action="#{beanArriendo.actionMenuUnPago()}" />
+				<p:menuitem value="Pago Múltiple" icon="pi pi-table"
+					action="#{beanArriendo.actionMenuMultiplePago()}" />
+				<p:menuitem value="Abonos" icon="pi pi-wallet"
+					action="#{beanArriendo.actionMenuAbono()}" />
 			</p:menubar>
-		
-			<div style="margin-top:15px;">
-				<h3>Control del Pago de Arriendo</h3>
+
+			<div style="margin-top: 15px;">
+				<h3>Control del Pago Único</h3>
 			</div>
-		
-			<h:outputText value="Clientes de Departamentos" style="margin-right:50px;"/>
-			<p:selectOneMenu id="menuClientes" value="#{beanArriendo.idCliente}" style="margin-top:10px;	">
-				<f:selectItems value="#{beanArriendo.clientes}" var="cli" itemLabel="#{cli.codigo}  -  #{cli.apellidos} #{cli.nombres}" itemValue="#{cli.idSegUsuario}">
+
+			<h:outputText value="Opciones de tipos de Pagos"
+				style="margin-right:50px; font-weight: bold;" />
+			<p:selectOneMenu id="menuNombresPagos" value="#{beanArriendo.dnpId}"
+				style="margin-top:10px; margin-right:50px;">
+				<f:selectItems value="#{beanArriendo.nombresPagos}" var="dnp"
+					itemLabel="#{dnp.dnpDescripcion}" itemValue="#{dnp.dnpId}">
 				</f:selectItems>
 			</p:selectOneMenu>
+
+
+			<h:outputText value="
+				Clientes de Departamentos"
+				style="margin-right:50px;font-weight: bold;" />
+			<p:selectOneMenu id="menuClientes" value="#{beanArriendo.idCliente}"
+				style="margin-top:10px;">
+				<f:selectItems value="#{beanArriendo.clientes}" var="cli"
+					itemLabel="#{cli.codigo}  -  #{cli.apellidos} #{cli.nombres}"
+					itemValue="#{cli.idSegUsuario}">
+				</f:selectItems>
+				<p:ajax process="menuClientes" partialSubmit="true"
+					listener="#{beanArriendo.actionListenerBuscarDepas()}"
+					event="valueChange" update="@form" />
+			</p:selectOneMenu>
+
 			
-			<h:outputText value="Departamentos del Cliente" style="margin-right:50px;"/>
+			
+            <h4 style="margin-top:40px;">Departamentos del cliente</h4>
+			<p:dataTable id="menuDepas" value="#{beanArriendo.depasPagar}" var="dep" style="margin-top:25px;">
+				<p:column headerText="Id del departamento">
+					<h:outputText value="#{dep.depId}" />
+				</p:column>
+				<p:column headerText="Habitantes">
+					<h:outputText value="#{dep.numClientes}" />
+				</p:column>
+				<p:column headerText="Costo Departamento">
+					<h:outputText value="#{dep.depPrecio}" />
+				</p:column>
+				<p:column headerText="Costo Servicio">
+					<h:outputText value="#{dep.serPrecio}" />
+				</p:column>
+				<p:column headerText="Costo Total">
+					<h:outputText value="#{dep.total}" />
+				</p:column>
+				<p:column headerText="Limite Fecha">
+					<h:outputText value="#{dep.limFechaPago}" />
+				</p:column>
+				<p:column headerText="Opciones">
+					<p:commandButton value="Agregar" actionListener="#{beanArriendo.actionListenerAgregarDepa(dep)}" update="@form"/>
+				</p:column>
+			</p:dataTable>
 			
 			
-		</h:form>	
+			
+			
+			<h4 style="margin-top:40px;">Departamentos a Pagar</h4>			
+			<p:dataTable value="#{beanArriendo.depasSeleccionados}" var="depp" style="margin-top:25px;">
+				<p:column headerText="Id del departamento">
+					<h:outputText value="#{depp.depId}" />
+				</p:column>
+				<p:column headerText="Habitantes">
+					<h:outputText value="#{depp.numClientes}" />
+				</p:column>
+				<p:column headerText="Costo Departamento">
+					<h:outputText value="#{depp.depPrecio}" />
+				</p:column>
+				<p:column headerText="Costo Servicio">
+					<h:outputText value="#{depp.serPrecio}" />
+				</p:column>
+				<p:column headerText="Costo Total">
+					<h:outputText value="#{depp.total}" />
+				</p:column>
+				<p:column headerText="Limite Fecha">
+					<h:outputText value="#{depp.limFechaPago}" />
+				</p:column>
+				<p:column headerText="Opciones">
+					<p:commandButton value="Eliminar" actionListener="#{beanArriendo.actionListenerEliminarDepa(depp)}" update="@form"/>
+				</p:column>
+			</p:dataTable>
+			<br></br>
+			<h:outputText value="TOTAL A PAGAR: #{beanArriendo.totalPagar}" />
+			
+			
+			
+			<br></br><br></br>
+			<h:outputText value="Cantidad de Pago $: " />
+			
+			<h:inputText value="#{beanArriendo.cantidadPago}" style="margin-right:25px;"/>
+			<p:commandButton value="Pagar"/>
+			
+			
+		</h:form>
 	</p:panel>
-	
-</body> 		
+
+</body>
 </html>
