@@ -2,10 +2,59 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html"> 
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"> 
 
 <h:head></h:head> 
-<body> 
+<body>
+	
+	<p:growl>
+		<p:autoUpdate />
+	</p:growl>
 	<h1>ASIGNACIÓN DE CLIENTES A DEPARTAMENTOS</h1>
+	<h:form>
+				<p:menubar>
+				<p:menuitem value="Regresar" icon="pi pi-home" action="/menu?faces-redirect=true" />
+				</p:menubar>
+				<h:outputText value="Seleccione el Departameto:" />
+				<p:selectOneMenu value="#{beanDcD.id_Dep}">
+					<f:selectItems value="#{beanDcD.listaDepartamentos}" var="d"
+						itemLabel="#{d.depId}" itemValue="#{d.depId}"></f:selectItems>
+				</p:selectOneMenu>
+				<h:outputText value="Seleccionar Cliente:" />
+				<p:selectOneMenu value="#{beanDcD.id_Cliente}">
+					<f:selectItems value="#{beanDcD.listaClientes}" var="c"
+						itemLabel="##{c.nombres}" itemValue="#{c.idSegUsuario}"></f:selectItems>
+				</p:selectOneMenu>
+				<h:outputText value="Observaciones:" />
+				<p:inputText value="#{beanDcD.obs}" height="100"></p:inputText>
+				<p:commandButton value="Agregar" update="@form"
+					actionListener="#{beanDcD.actionListenerAgregarDTO()}" />
+					
+				<p:dataTable value="#{beanDcD.listadto}"
+				var="d">
+				<p:column headerText="ID">
+					<h:outputText value="#{d.id}" />
+				</p:column>
+				<p:column headerText="CEDULA">
+					<h:outputText value="#{d.codigo}" />
+				</p:column>
+				<p:column headerText="APELLIDOS">
+					<h:outputText value="#{d.apellidos}" />
+				</p:column>
+				<p:column headerText="NOMBRES">
+					<h:outputText value="#{d.nombres}" />
+				</p:column>
+				<p:column headerText="Opciones">
+					<p:commandButton value="Eliminar"  update="@form"
+						actionListener="#{beanDcD.eliminar(d.id)}" />
+				</p:column>
+				</p:dataTable>
+				
+				<p:commandButton value="Guardar" icon="pi pi-save" update="@form" 
+				actionListener="#{beanDcD.actionListenerGuardar()}"></p:commandButton>
+			
+	</h:form>
+	
 </body> 
 </html>
