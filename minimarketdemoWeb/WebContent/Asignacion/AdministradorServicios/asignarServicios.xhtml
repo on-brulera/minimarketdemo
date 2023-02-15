@@ -1,11 +1,52 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html"> 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
 
-<h:head></h:head> 
-<body> 
-	<h1>ASGINAR LOS SERVICIOS A LOS DEPARTAMENTOS</h1>
-</body> 
+<h:head></h:head>
+<body>
+	<h:form>
+		<h1>ASGINAR LOS SERVICIOS A LOS DEPARTAMENTOS</h1>
+		<p:menubar>
+			<p:menuitem value="Regresar" icon="pi pi-home"
+				action="/menu?faces-redirect=true" />
+		</p:menubar>
+		<h:outputText value="Seleccione el Departameto:" />
+		<p:selectOneMenu value="#{beanSdS.id_Dep}">
+			<f:selectItems value="#{beanSdS.listaDepartamentos}" var="d"
+				itemLabel="#{d.depId}" itemValue="#{d.depId}"></f:selectItems>
+		</p:selectOneMenu>
+		<h:outputText value="Seleccionar Servicio:" />
+		<p:selectOneMenu value="#{beanSdS.id_ser}">
+			<f:selectItems value="#{beanSdS.listaServicios}" var="c"
+				itemLabel="##{c.serDescripcion}" itemValue="#{c.serId}"></f:selectItems>
+		</p:selectOneMenu>
+		<h:outputText value="Observaciones:" />
+		<p:inputText value="#{beanSdS.obs}" height="100"></p:inputText>
+		<p:commandButton value="Agregar" update="@form"
+			actionListener="#{beanSdS.actionListenerAgregarDTO()}" />
+
+		<p:dataTable value="#{beanSdS.listadto}" var="d">
+			<p:column headerText="ID">
+				<h:outputText value="#{d.id}" />
+			</p:column>
+			<p:column headerText="Servicio">
+				<h:outputText value="#{d.descripcion}" />
+			</p:column>
+			<p:column headerText="Precio">
+				<h:outputText value="#{d.preciobase}" />
+			</p:column>
+			<p:column headerText="Opciones">
+				<p:commandButton value="Eliminar" update="@form"
+					actionListener="#{beanSdS.eliminar(d.id)}" />
+			</p:column>
+		</p:dataTable>
+
+		<p:commandButton value="Guardar" icon="pi pi-save" update="@form"
+			actionListener="#{beanSdS.actionListenerGuardar()}"></p:commandButton>
+
+	</h:form>
+</body>
 </html>

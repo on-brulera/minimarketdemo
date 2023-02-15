@@ -14,7 +14,7 @@
 	</p:growl>
 	<h:form id="form1">
 		<p:menubar>
-			<p:menuitem value="Regresar" icon="pi pi-home" action="menu" />
+			<p:menuitem value="Regresar" icon="pi pi-home" action="/menu?faces-redirect=true" />
 			<f:facet name="options">
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
 					icon="pi pi-user">
@@ -25,6 +25,7 @@
 			</f:facet>
 		</p:menubar>
 	</h:form>
+	<h1>REGISTRO DE SERVICIOS</h1>
 	<h:form id="form2">
 		<p:messages>
 			<p:autoUpdate />
