@@ -7,6 +7,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Table;
 import javax.persistence.TypedQuery;
 
 import minimarketdemo.model.core.entities.DepDepartamentoServicio;
@@ -26,6 +27,8 @@ public class ManagerSer_Servicio_Departamento {
 	
 	@EJB
 	private ManagerApartment ma;
+	
+	Table tabla= DepServicio.class.getAnnotation(Table.class);
 	
 	public ManagerSer_Servicio_Departamento() {
 
@@ -75,7 +78,7 @@ public class ManagerSer_Servicio_Departamento {
 			dcd.setDdsObservacion(obs);
 			em.persist(dcd);
 			em.merge(dep);
-			ma.getDatosAuditoria("insertar");
+			ma.getDatosAuditoria("insertar", tabla);
 		}
 	}
 

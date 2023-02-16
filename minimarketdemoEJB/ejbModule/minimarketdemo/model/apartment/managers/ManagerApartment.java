@@ -30,7 +30,10 @@ public class ManagerApartment {
 	
 	@EJB
 	private ManagerSeguridades ms;
+	
+	Table tabla = DepDepartamento.class.getAnnotation(Table.class);
 
+	
     /**
      * Default constructor. 
      */
@@ -73,7 +76,7 @@ public class ManagerApartment {
     	
     	em.persist(a);
     	
-    	getDatosAuditoria("insertar");
+    	getDatosAuditoria("insertar",tabla);
     
     	
     }
@@ -91,12 +94,11 @@ public class ManagerApartment {
     	}*/
     
     
-    public void getDatosAuditoria(String accion) {
+    public void getDatosAuditoria(String accion, Table tablaDepartamento) {
     	Date fecha=new Date();
     	DepAuditoria auditoria=new DepAuditoria();
     	SegUsuario usuario=new SegUsuario();
     	SegPerfil perfil=new SegPerfil();
-    	Table tablaDepartamento = DepDepartamento.class.getAnnotation(Table.class);
      
 		
     	usuario=em.find(SegUsuario.class, ManagerSeguridades.idSegUsuarioSeleccion);
@@ -144,7 +146,7 @@ public class ManagerApartment {
     	//Servicio s=em.find(Servicio.class, idServicioEdicion);
     	
     	em.merge(a);
-    	getDatosAuditoria("actualizar");
+    	getDatosAuditoria("actualizar", tabla);
     	return a;
     	
     }
@@ -156,7 +158,7 @@ public class ManagerApartment {
 		DepDepartamento o = findDepartamentoById(depId);
 		try {
 			em.remove(o);
-			getDatosAuditoria("eliminar");
+			getDatosAuditoria("eliminar",tabla);
 		} catch (Exception e) {
 			throw new Exception("No se pudo eliminar el dato: " + e.getMessage());
 		}

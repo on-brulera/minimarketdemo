@@ -9,6 +9,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Table;
 import javax.persistence.TypedQuery;
 
 import departamento.model.controlpagos.DTO.PagoArriendoUnico;
@@ -40,6 +41,8 @@ public class ManagerArriendo {
 	
 	@EJB
 	private ManagerApartment ma;
+	
+	Table tabla=DepArriendoCabecera.class.getAnnotation(Table.class);
 
 	@PersistenceContext
 	EntityManager em;
@@ -213,7 +216,7 @@ public class ManagerArriendo {
 			}
 		}
 		lista.add(depa);
-		ma.getDatosAuditoria("insertar");
+		ma.getDatosAuditoria("insertar", tabla);
 		return lista;
 	}
 
@@ -221,7 +224,7 @@ public class ManagerArriendo {
 		for (PagoArriendoUnico li : lista) {
 			if (li.getDepId() == depa.getDepId()) {
 				lista.remove(li);
-				ma.getDatosAuditoria("eliminar");
+				ma.getDatosAuditoria("eliminar", tabla);
 				break;
 			}
 		}
@@ -354,7 +357,7 @@ public class ManagerArriendo {
 		abono.setDadFechaPago(new Date());
 		abono.setDepArriendoCabecera(depArriendoCabecera);
 		em.persist(abono);
-		ma.getDatosAuditoria("insertar");
+		ma.getDatosAuditoria("insertar", tabla);
 		
 	}
 }

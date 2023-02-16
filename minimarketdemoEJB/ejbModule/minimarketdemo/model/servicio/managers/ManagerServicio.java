@@ -7,6 +7,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Table;
 import javax.persistence.TypedQuery;
 
 import minimarketdemo.model.apartment.managers.ManagerApartment;
@@ -30,6 +31,7 @@ public class ManagerServicio {
 	@EJB
 	private ManagerApartment ma;
 	
+	Table tabla=DepServicio.class.getAnnotation(Table.class);
 	public ManagerServicio() {
 		// TODO Auto-generated constructor stub
 	}
@@ -41,7 +43,7 @@ public class ManagerServicio {
 		nuevoServicio.setSerPrecioBase(precio);
 		// em.persist(nuevoServicio);
 		mDAO.insertar(nuevoServicio);
-		ma.getDatosAuditoria("insertar");
+		ma.getDatosAuditoria("insertar", tabla);
 	}
 
 	public List<DepServicio> findAllServicio() {
@@ -53,7 +55,7 @@ public class ManagerServicio {
 		servicio.setSerDescripcion(edicionServicio.getSerDescripcion());
 		servicio.setSerPrecioBase(edicionServicio.getSerPrecioBase());
 		mDAO.actualizar(servicio);
-		ma.getDatosAuditoria("actualizar");
+		ma.getDatosAuditoria("actualizar",tabla);
 	}
 
 	public void eliminarServicio(int idDepServicio) throws Exception {
@@ -63,7 +65,7 @@ public class ManagerServicio {
 		if (servicio.getDepDepartamentoServicios().size() > 0)
 			throw new Exception("No se puede elimininar el servicio porque tiene asignaciones de módulos.");
 		mDAO.eliminar(DepServicio.class, servicio.getSerId());
-		ma.getDatosAuditoria("eliminar");
+		ma.getDatosAuditoria("eliminar",tabla);
 		// TODO agregar uso de LoginDTO para auditar metodo.
 	}
 
