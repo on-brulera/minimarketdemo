@@ -1,14 +1,17 @@
 package departamento.model.registro.managers;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import minimarketdemo.model.apartment.managers.ManagerApartment;
 import minimarketdemo.model.core.entities.SegUsuario;
 
 @Stateless
@@ -17,6 +20,9 @@ public class ManagerRegistro {
 	@PersistenceContext
 	private EntityManager em;
 	
+
+	@EJB
+	private ManagerApartment ma=new ManagerApartment();
 	
 	public ManagerRegistro(){
 		
@@ -52,6 +58,8 @@ public class ManagerRegistro {
 		cliente.setActivo(false);
 		
 		em.persist(cliente);
+		ma.getDatosAuditoria("insertar");
+		
     	return cliente;
 	}
 	
@@ -59,6 +67,7 @@ public class ManagerRegistro {
 		final SegUsuario cliente=(SegUsuario)this.em.find((Class)SegUsuario.class, (Object)id);
     	if(cliente !=null)
     		this.em.remove((Object)cliente);
+    		ma.getDatosAuditoria("eliminar");
     	return cliente;
     }
 
@@ -71,8 +80,8 @@ public class ManagerRegistro {
 		cliente.setNombres(c.getNombres());
 		cliente.setCorreo(c.getCorreo());
     	em.merge(cliente);
+		ma.getDatosAuditoria("actualizar");
     	return cliente;
     }
-    
 
 }

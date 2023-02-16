@@ -22,5 +22,7 @@
 		<class>minimarketdemo.model.core.entities.DepDepartamentoServicio</class>
 		<class>minimarketdemo.model.core.entities.DepNombrePago</class>
 		<class>minimarketdemo.model.core.entities.DepServicio</class>
+		<class>minimarketdemo.model.core.entities.DepAuditoria</class>
+		<class>minimarketdemo.model.core.entities.DepLinkert</class>
 	</persistence-unit>
 </persistence>

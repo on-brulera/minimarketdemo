@@ -1,14 +1,22 @@
 package minimarketdemo.model.apartment.managers;
 
+import java.util.Date;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Table;
 import javax.persistence.TypedQuery;
 
+import minimarketdemo.model.core.entities.AudBitacora;
+import minimarketdemo.model.core.entities.DepAuditoria;
 import minimarketdemo.model.core.entities.DepDepartamento;
+import minimarketdemo.model.core.entities.SegPerfil;
+import minimarketdemo.model.core.entities.SegUsuario;
+import minimarketdemo.model.seguridades.managers.ManagerSeguridades;
 
 /**
  * Session Bean implementation class ManagerApartment
@@ -19,6 +27,9 @@ public class ManagerApartment {
 	
 	@PersistenceContext
 	private EntityManager em;
+	
+	@EJB
+	private ManagerSeguridades ms;
 
     /**
      * Default constructor. 
@@ -31,6 +42,7 @@ public class ManagerApartment {
     	TypedQuery<DepDepartamento> q=em.createQuery("Select d from DepDepartamento d order by d.depId", DepDepartamento.class);
     	return q.getResultList();
     }
+    
     
     public DepDepartamento findDepartamentoById(Integer depId) throws Exception {
     	/*
@@ -49,7 +61,7 @@ public class ManagerApartment {
     
     public void insertarDepartamento(DepDepartamento departamento) throws Exception {
     
-    	
+    
     	DepDepartamento a= new DepDepartamento();
     	//a.setDepId(departamento.getDepId());
     	a.setDepDisponible(departamento.getDepDisponible());
@@ -61,6 +73,44 @@ public class ManagerApartment {
     	
     	em.persist(a);
     	
+    	getDatosAuditoria("insertar");
+    
+    	
+    }
+     
+    /*
+    public List<LoginDTO> getAllLoginDTOs() {
+    	
+    	List<LoginDTO> loginList = new ArrayList<LoginDTO>();
+    	
+    	   List<LoginDTO> allLoginDTOs = new ArrayList<LoginDTO>();
+    	   for (LoginDTO loginDTO : loginList) {
+    	      allLoginDTOs.add(loginDTO);
+    	   }
+    	   return allLoginDTOs;
+    	}*/
+    
+    
+    public void getDatosAuditoria(String accion) {
+    	Date fecha=new Date();
+    	DepAuditoria auditoria=new DepAuditoria();
+    	SegUsuario usuario=new SegUsuario();
+    	SegPerfil perfil=new SegPerfil();
+    	Table tablaDepartamento = DepDepartamento.class.getAnnotation(Table.class);
+     
+		
+    	usuario=em.find(SegUsuario.class, ManagerSeguridades.idSegUsuarioSeleccion);
+    	perfil=em.find(SegPerfil.class, usuario.getIdSegUsuario());
+    	
+    	
+    	auditoria.setAudAccion(accion);
+    	auditoria.setAudAccionDescripcion("se realizo un "+accion+" en el CRUD");
+    	auditoria.setAudNombreTabla(tablaDepartamento.name());
+    	auditoria.setAudNombrePersona(usuario.getNombres()+" "+usuario.getApellidos());
+    	auditoria.setAudNombreRol(perfil.getNombrePerfil());
+    	auditoria.setAudFechaAccion(fecha);
+    	auditoria.setAudIdUsuario(usuario.getIdSegUsuario());
+    	em.persist(auditoria);
     	
     }
     
@@ -94,6 +144,7 @@ public class ManagerApartment {
     	//Servicio s=em.find(Servicio.class, idServicioEdicion);
     	
     	em.merge(a);
+    	getDatosAuditoria("actualizar");
     	return a;
     	
     }
@@ -105,6 +156,7 @@ public class ManagerApartment {
 		DepDepartamento o = findDepartamentoById(depId);
 		try {
 			em.remove(o);
+			getDatosAuditoria("eliminar");
 		} catch (Exception e) {
 			throw new Exception("No se pudo eliminar el dato: " + e.getMessage());
 		}

@@ -3,12 +3,14 @@ package minimarketdemo.model.dep_cliente_departamento.managers;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import minimarketdemo.model.apartment.managers.ManagerApartment;
 import minimarketdemo.model.core.entities.DepClienteDepartamento;
 import minimarketdemo.model.core.entities.DepDepartamento;
 import minimarketdemo.model.core.entities.SegUsuario;
@@ -20,6 +22,8 @@ public class ManagerDep_Cliente_Departamento {
 	@PersistenceContext
 	private EntityManager em;
 	
+	@EJB
+	private ManagerApartment ma=new ManagerApartment();
 	
 	public ManagerDep_Cliente_Departamento(){
 		
@@ -77,6 +81,7 @@ public class ManagerDep_Cliente_Departamento {
 			dcd.setDcdObservacion(obs);
 			em.persist(dcd);
 			em.merge(dep);
+			ma.getDatosAuditoria("insertar");
     	}
 	}
 

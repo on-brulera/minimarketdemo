@@ -25,6 +25,7 @@ public class BeanSegLogin implements Serializable {
 	private String clave;
 	private LoginDTO loginDTO;
 	private String direccionIP;
+	public static int idSegUsuarioSeleccion=0;
 	
 	@EJB
 	private ManagerSeguridades mSeguridades;
@@ -48,6 +49,7 @@ public class BeanSegLogin implements Serializable {
 	public String actionLogin() {
 		try {
 			loginDTO=mSeguridades.login(idSegUsuario, clave, direccionIP);
+			idSegUsuarioSeleccion=idSegUsuario;
 			//loginDTO.setDireccionIP(direccionIP);
 			return "menu?faces-redirect=true";
 		} catch (Exception e) {

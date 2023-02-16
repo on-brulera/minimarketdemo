@@ -31,6 +31,8 @@ public class ManagerSeguridades {
 	private ManagerDAO mDAO;
 	@EJB
 	private ManagerAuditoria mAuditoria;
+	
+	public static Integer idSegUsuarioSeleccion=0;
     /**
      * Default constructor. 
      */
@@ -151,6 +153,7 @@ public class ManagerSeguridades {
      */
     public LoginDTO login(int idSegUsuario,String clave,String direccionIP) throws Exception{
     	//crear DTO:
+    	idSegUsuarioSeleccion=idSegUsuario;
 		LoginDTO loginDTO=new LoginDTO();
 		loginDTO.setIdSegUsuario(idSegUsuario);
 		loginDTO.setDireccionIP(direccionIP);
@@ -187,6 +190,7 @@ public class ManagerSeguridades {
     	throw new Exception("Error en credenciales");
     }
     
+
     public void cerrarSesion(int idSegUsuario) {
     	mAuditoria.mostrarLog(getClass(), "cerrarSesion", "Cerrar sesión usuario: "+idSegUsuario);
     }
