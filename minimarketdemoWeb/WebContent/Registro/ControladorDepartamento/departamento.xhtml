@@ -5,11 +5,11 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p= "http://primefaces.org/ui"> 
 
-<h:head>Faican's Apartment</h:head> 
+<h:head>
+	<title>Departamento</title>
+</h:head> 
 <body> 
-	<h1>CONTROL DE DEPARTAMENTOS</h1>
-	
-	
+		
 	<p:growl>
 		<p:autoUpdate />
 	</p:growl>
@@ -17,7 +17,11 @@
 	<h:form id="formPrincipal">
 	
 	<p:panel header="Registro de nuevo departamento">
-			
+	
+			<p:menubar>
+				<p:menuitem value="Regresar" icon="pi pi-home" action="/menu?faces-redirect=true" />
+		</p:menubar>
+					
 			<p:panelGrid columns="2">
 		
 				

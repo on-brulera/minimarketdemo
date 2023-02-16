@@ -29,6 +29,7 @@ public class BeanDcD implements Serializable {
 	private List<DepDepartamento> listaDepartamentos;
 	private List<DepClienteDepartamento> listadcd;
 	private List<DTOdcd> listadto;
+	private List<DepClienteDepartamento> registro;
 	
 	private int id_Cliente;
 	private int id_Dep;
@@ -45,6 +46,7 @@ public class BeanDcD implements Serializable {
 		listaDepartamentos=managerdcd.findAllDepartamento();
 		listadcd=managerdcd.findAllDep();
 		listadto=new ArrayList<DTOdcd>();
+		registro =managerdcd.findAllDep();
 
 	}
 	
@@ -134,6 +136,13 @@ public class BeanDcD implements Serializable {
 	public void setObs(String obs) {
 		this.obs = obs;
 	}
-	
-	
+
+	public List<DepClienteDepartamento> getRegistro() {
+		return registro;
+	}
+
+	public void setRegistro(List<DepClienteDepartamento> registro) {
+		this.registro = registro;
+	}
+		
 }

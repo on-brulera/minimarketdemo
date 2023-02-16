@@ -1,11 +1,134 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html"> 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
 
-<h:head></h:head> 
-<body> 
-	<h1>Control del pago de Garantia</h1>
-</body> 
+<h:head>
+	<title>Garantia</title>
+</h:head>
+<body>
+	<h:form>
+
+		<p:panel>
+
+			<p:menubar>
+				<p:menuitem value="Regresar" icon="pi pi-home"
+					action="/menu?faces-redirect=true" />
+				<p:menuitem value="Abonos" icon="pi pi-wallet"
+					action="#{beanGarantia.actionMenuAbono()}" />
+				<p:menuitem value="Registros" icon="pi pi-list"
+					action="#{beanGarantia.actionMenuRegistro()}" />
+			</p:menubar>
+
+			<div style="margin-top: 15px;">
+				<h4>Control del Pago de Garantias</h4>
+			</div>
+
+			<h:outputText value="Opciones de tipos de Pagos"
+				style="margin-right:50px; font-weight: bold;" />
+			<p:selectOneMenu id="menuNombresPagos" value="#{beanGarantia.dnpId}"
+				style="margin-top:10px; margin-right:50px;">
+				<f:selectItems value="#{beanGarantia.nombresPagos}" var="dnp"
+					itemLabel="#{dnp.dnpDescripcion}" itemValue="#{dnp.dnpId}">
+				</f:selectItems>
+			</p:selectOneMenu>
+
+			<h:outputText value="
+				Clientes de Departamentos"
+				style="margin-right:50px;font-weight: bold;" />
+			<p:selectOneMenu id="menuClientes" value="#{beanGarantia.idCliente}"
+				style="margin-top:10px;">
+				<f:selectItems value="#{beanGarantia.clientes}" var="cli"
+					itemLabel="#{cli.codigo}  -  #{cli.apellidos} #{cli.nombres}"
+					itemValue="#{cli.idSegUsuario}">
+				</f:selectItems>
+				<p:ajax process="menuClientes" partialSubmit="true"
+					listener="#{beanGarantia.actionListenerBuscarDepas()}"
+					event="valueChange" update="@form" />
+			</p:selectOneMenu>
+
+			<br></br>
+
+			<h4 style="margin-top: 40px;">Garantias de los Departamento</h4>
+			<p:dataTable id="menuDepas" value="#{beanGarantia.depasPagar}"
+				var="dep" style="margin-top:25px;">
+				<p:column headerText="Id del departamento">
+					<h:outputText value="#{dep.depId}" />
+				</p:column>
+				<p:column headerText="Habitantes">
+					<h:outputText value="#{dep.numClientes}" />
+				</p:column>
+				<p:column headerText="Costo Departamento">
+					<h:outputText value="#{dep.depPrecio}" />
+				</p:column>
+				<p:column headerText="Costo Servicio">
+					<h:outputText value="#{dep.serPrecio}" />
+				</p:column>
+				<p:column headerText="Costo Total">
+					<h:outputText value="#{dep.total}" />
+				</p:column>
+				<p:column headerText="Limite Fecha">
+					<h:outputText value="#{dep.limFechaPago}" />
+				</p:column>
+				<p:column headerText="Opciones">
+					<p:commandButton value="Agregar"
+						actionListener="#{beanGarantia.actionListenerAgregarDepa(dep)}"
+						update="@form" />
+				</p:column>
+			</p:dataTable>
+
+
+
+			<br></br>
+			<br></br>
+
+			<h4 style="margin-top: 40px;">Departamentos a Pagar</h4>
+			<p:dataTable value="#{beanGarantia.depasSeleccionados}" var="depp"
+				style="margin-top:25px;">
+				<p:column headerText="Id del departamento">
+					<h:outputText value="#{depp.depId}" />
+				</p:column>
+				<p:column headerText="Habitantes">
+					<h:outputText value="#{depp.numClientes}" />
+				</p:column>
+				<p:column headerText="Costo Departamento">
+					<h:outputText value="#{depp.depPrecio}" />
+				</p:column>
+				<p:column headerText="Costo Servicio">
+					<h:outputText value="#{depp.serPrecio}" />
+				</p:column>
+				<p:column headerText="Costo Total">
+					<h:outputText value="#{depp.total}" />
+				</p:column>
+				<p:column headerText="Limite Fecha">
+					<h:outputText value="#{depp.limFechaPago}" />
+				</p:column>
+				<p:column headerText="Opciones">
+					<p:commandButton value="Eliminar"
+						actionListener="#{beanGarantia.actionListenerEliminarDepa(depp)}"
+						update="@form" />
+				</p:column>
+			</p:dataTable>
+			<br></br>
+			<h:outputText value="TOTAL A PAGAR: #{beanGarantia.totalPagar}" />
+	
+			<br></br>
+			<br></br>
+			<h:outputText value="TOTAL A PAGAR: #{beanGarantia.totalPagar}" />
+			
+			<br></br><br></br>
+			<h:outputText value="Cantidad de Pago $: " />
+			
+			<h:inputText value="#{beanGarantia.cantidadPago}" style="margin-right:25px;"/>
+			<p:commandButton value="Pagar" actionListener="#{beanGarantia.actionListenerPagarPagoUnico()}"/>
+
+
+		</p:panel>
+
+
+	</h:form>
+
+</body>
 </html>

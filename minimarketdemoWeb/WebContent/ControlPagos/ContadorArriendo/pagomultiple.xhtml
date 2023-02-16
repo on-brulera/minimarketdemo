@@ -24,11 +24,120 @@
 					action="#{beanArriendo.actionMenuMultiplePago()}" />
 				<p:menuitem value="Abonos" icon="pi pi-wallet"
 					action="#{beanArriendo.actionMenuAbono()}" />
+				<p:menuitem value="Registros" icon="pi pi-list"
+					action="#{beanArriendo.actionMenuRegistro()}" />
 			</p:menubar>
 
 			<div style="margin-top: 15px;">
 				<h3>Control de Pagos Múltiples</h3>
 			</div>
+
+			<h:outputText value="Solo Para Tipo de Pago Arriendo" />
+
+			<br />
+			<br />
+			<h:outputText value="Numero de Meses a Pagar: " />
+			<p:spinner value="#{beanArriendo.numMeses}" min="1" max="12" />
+			<br />
+			<br />
+
+			<h:outputText value="
+				Clientes de Departamentos"
+				style="margin-right:50px;font-weight: bold;" />
+			<p:selectOneMenu id="menuClientes" value="#{beanArriendo.idCliente}"
+				style="margin-top:10px;">
+				<f:selectItems value="#{beanArriendo.clientes}" var="cli"
+					itemLabel="#{cli.codigo}  -  #{cli.apellidos} #{cli.nombres}"
+					itemValue="#{cli.idSegUsuario}">
+				</f:selectItems>
+				<p:ajax process="menuClientes" partialSubmit="true"
+					listener="#{beanArriendo.actionListenerBuscarDepasMultiple()}"
+					event="valueChange" />
+			</p:selectOneMenu>
+
+
+			<br></br>
+			<br></br>
+			<br></br>
+
+			<p:commandButton value="calcular"
+				actionListener="#{beanArriendo.actionListenerCalcularDatosMultiple()}"
+				update="menuDepas"></p:commandButton>
+
+			<br></br>
+
+			<h4 style="margin-top: 40px;">Departamentos del cliente</h4>
+			<p:dataTable id="menuDepas" value="#{beanArriendo.depasPagar}"
+				var="dep" style="margin-top:25px;">
+				<p:column headerText="Id del departamento">
+					<h:outputText value="#{dep.depId}" />
+				</p:column>
+				<p:column headerText="Habitantes">
+					<h:outputText value="#{dep.numClientes}" />
+				</p:column>
+				<p:column headerText="Costo Departamento">
+					<h:outputText value="#{dep.depPrecio}" />
+				</p:column>
+				<p:column headerText="Costo Servicio">
+					<h:outputText value="#{dep.serPrecio}" />
+				</p:column>
+				<p:column headerText="Costo Total">
+					<h:outputText value="#{dep.total}" />
+				</p:column>
+				<p:column headerText="Limite Fecha">
+					<h:outputText value="#{dep.limFechaPago}" />
+				</p:column>
+				<p:column headerText="Opciones">
+					<p:commandButton value="Agregar"
+						actionListener="#{beanArriendo.actionListenerAgregarDepa(dep)}"
+						update="@form" />
+				</p:column>
+			</p:dataTable>
+
+
+
+
+
+			<h4 style="margin-top: 40px;">Departamentos a Pagar</h4>
+			<p:dataTable value="#{beanArriendo.depasSeleccionados}" var="depp"
+				style="margin-top:25px;">
+				<p:column headerText="Id del departamento">
+					<h:outputText value="#{depp.depId}" />
+				</p:column>
+				<p:column headerText="Habitantes">
+					<h:outputText value="#{depp.numClientes}" />
+				</p:column>
+				<p:column headerText="Costo Departamento">
+					<h:outputText value="#{depp.depPrecio}" />
+				</p:column>
+				<p:column headerText="Costo Servicio">
+					<h:outputText value="#{depp.serPrecio}" />
+				</p:column>
+				<p:column headerText="Costo Total">
+					<h:outputText value="#{depp.total}" />
+				</p:column>
+				<p:column headerText="Limite Fecha">
+					<h:outputText value="#{depp.limFechaPago}" />
+				</p:column>
+				<p:column headerText="Opciones">
+					<p:commandButton value="Eliminar"
+						actionListener="#{beanArriendo.actionListenerEliminarDepa(depp)}"
+						update="@form" />
+				</p:column>
+			</p:dataTable>
+			<br></br>
+			<h:outputText value="TOTAL A PAGAR: #{beanArriendo.totalPagar}" />
+
+
+			<br></br>
+			<br></br>
+			<h:outputText value="Cantidad de Pago $: " />
+
+			<h:inputText value="#{beanArriendo.cantidadPago}"
+				style="margin-right:25px;" />
+			<p:commandButton value="Pagar"
+				actionListener="#{beanArriendo.actionListenerPagarPagoUnico()}" />
+
 		</h:form>
 	</p:panel>
 </body>

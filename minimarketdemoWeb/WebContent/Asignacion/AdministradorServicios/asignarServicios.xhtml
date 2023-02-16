@@ -7,24 +7,29 @@
 
 <h:head></h:head>
 <body>
-	<h:form>
-		<h1>ASGINAR LOS SERVICIOS A LOS DEPARTAMENTOS</h1>
+	<h:form>		
+		
 		<p:menubar>
 			<p:menuitem value="Regresar" icon="pi pi-home"
 				action="/menu?faces-redirect=true" />
 		</p:menubar>
-		<h:outputText value="Seleccione el Departameto:" />
+		
+		<br></br>
+		<h3>ASIGNAR SERVICIOS A UN DEPARTAMENTO</h3>
+		<br></br>
+		
+		<h:outputText value="Seleccione el Departameto:" style="margin-right:25px;"/>
 		<p:selectOneMenu value="#{beanSdS.id_Dep}">
 			<f:selectItems value="#{beanSdS.listaDepartamentos}" var="d"
 				itemLabel="#{d.depId}" itemValue="#{d.depId}"></f:selectItems>
 		</p:selectOneMenu>
-		<h:outputText value="Seleccionar Servicio:" />
+		<h:outputText value="Seleccionar Servicio:" style="margin-right:25px; margin-left:25px;"/>
 		<p:selectOneMenu value="#{beanSdS.id_ser}">
 			<f:selectItems value="#{beanSdS.listaServicios}" var="c"
 				itemLabel="##{c.serDescripcion}" itemValue="#{c.serId}"></f:selectItems>
 		</p:selectOneMenu>
-		<h:outputText value="Observaciones:" />
-		<p:inputText value="#{beanSdS.obs}" height="100"></p:inputText>
+		<h:outputText value="Observaciones:" style="margin-right:25px;margin-left:25px;"/>
+		<p:inputText value="#{beanSdS.obs}" height="100" style="margin-right:25px;"></p:inputText>
 		<p:commandButton value="Agregar" update="@form"
 			actionListener="#{beanSdS.actionListenerAgregarDTO()}" />
 
@@ -44,9 +49,21 @@
 			</p:column>
 		</p:dataTable>
 
+		<br></br>
 		<p:commandButton value="Guardar" icon="pi pi-save" update="@form"
 			actionListener="#{beanSdS.actionListenerGuardar()}"></p:commandButton>
-
+		
+		<br></br>
+		
+		<p:dataTable value="#{beanSdS.registro}" var="reg" paginator="true" rows="5">
+			<p:column headerText="Id departamento">
+				<h:outputText value="#{reg.depDepartamento.depId}" />
+			</p:column>
+			<p:column>
+				<h:outputText value="#{reg.depServicio.serDescripcion}" />
+			</p:column>
+		</p:dataTable>
+		
 	</h:form>
 </body>
 </html>

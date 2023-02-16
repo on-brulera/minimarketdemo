@@ -41,6 +41,11 @@ public class ManagerSer_Servicio_Departamento {
 		return (List<DepDepartamentoServicio>) q.getResultList();
 	}
 
+	public List<DepDepartamentoServicio> findRegistro() {
+		final TypedQuery<DepDepartamentoServicio> q = (TypedQuery<DepDepartamentoServicio>) this.em.createQuery("select d from DepDepartamentoServicio d order by d.ddsId", (Class) DepDepartamentoServicio.class);
+		return (List<DepDepartamentoServicio>) q.getResultList();
+	}
+	
 	public DTOsds crearDTO(int id, int serId) {
 
 		DepDepartamento d = em.find(DepDepartamento.class, id);

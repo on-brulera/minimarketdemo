@@ -24,11 +24,58 @@
 					action="#{beanArriendo.actionMenuMultiplePago()}" />
 				<p:menuitem value="Abonos" icon="pi pi-wallet"
 					action="#{beanArriendo.actionMenuAbono()}" />
+				<p:menuitem value="Registros" icon="pi pi-list"
+					action="#{beanArriendo.actionMenuRegistro()}" />
 			</p:menubar>
 
 			<div style="margin-top: 15px;">
 				<h3>Control del Pago de Abonos</h3>
 			</div>
+			
+			<p:dataTable value="#{beanArriendo.listaDeudas}" var="deu" paginator="true" rows="5">
+			
+				<p:column headerText="Id Departamento">
+					<h:outputText value="#{deu.depDepartamento.depId}" />
+				</p:column>
+				
+				<p:column headerText="Pago Total">
+					<h:outputText value="#{deu.dacTotalPago}" />
+				</p:column>
+				
+				<p:column headerText="Pago Restante">
+					<h:outputText value="#{deu.dacPagoRestante}" />
+				</p:column>							
+				
+				<p:column headerText="Opciones">
+					<p:commandButton value="Seleccionar" actionListener="#{beanArriendo.actionListenerSeleccionarDeuda(deu)}" update="@form"/>
+				</p:column>
+			
+			</p:dataTable>
+				
+			<h3>Deuda Seleccionada</h3>
+						
+			<h:outputText value="ID DEPARTAMENTO:  #{beanArriendo.cabDeudaSeleccionado.depDepartamento.depId}" />
+			
+			<br/>
+			<br/>
+						
+			<h:outputText value="PAGO TOTAL:  #{beanArriendo.cabDeudaSeleccionado.dacTotalPago}" />
+			
+			<br/>
+			<br/>
+			
+			<h:outputText value="PAGO RESTANTE: #{beanArriendo.cabDeudaSeleccionado.dacPagoRestante}" />
+			
+			<br/>
+			<br/>
+			
+			<p:inputText placeholder="CANTIDAD DE ABONO" value="#{beanArriendo.cantidadAbono}"/>			
+			
+			<br/>
+			<br/>
+			
+			<p:commandButton value="Pagar Abono" actionListener="#{beanArriendo.actionListenerPagarAbono()}" update="@form"/>
+			
 		</h:form>
 	</p:panel>
 </body>

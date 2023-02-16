@@ -29,6 +29,11 @@ public class BeanServicio implements Serializable {
 
 	}
 	
+	@PostConstruct
+	public void inicializar() {
+		listaServicios = managerServicio.findAllServicio();
+	}
+	
 	public void actionListenerColapsarPanel() {
 		panelColapsado = !panelColapsado;
 	}

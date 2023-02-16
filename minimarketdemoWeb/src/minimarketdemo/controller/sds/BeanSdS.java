@@ -31,6 +31,7 @@ public class BeanSdS implements Serializable {
 	private List<DepDepartamento> listaDepartamentos;
 	private List<DepDepartamentoServicio> listadcd;
 	private List<DTOsds> listadto;
+	private List<DepDepartamentoServicio> registro;
 
 	private int id_ser;
 	private int id_Dep;
@@ -46,6 +47,7 @@ public class BeanSdS implements Serializable {
 		listaDepartamentos = managersds.findAllDepartamento();
 		listadcd = managersds.findAllDep();
 		listadto = new ArrayList<DTOsds>();
+		registro = managersds.findRegistro();
 	}
 
 	public void eliminar(int idser) {
@@ -125,6 +127,12 @@ public class BeanSdS implements Serializable {
 		this.obs = obs;
 	}
 
-	
+	public List<DepDepartamentoServicio> getRegistro() {
+		return registro;
+	}
+
+	public void setRegistro(List<DepDepartamentoServicio> registro) {
+		this.registro = registro;
+	}
 	
 }

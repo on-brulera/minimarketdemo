@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Registros</title>
+</h:head>
+<body>
+
+	<h:form>
+
+		<p:panel>
+
+			<p:menubar>
+				<p:menuitem value="Regresar" icon="pi pi-home"
+					action="/menu?faces-redirect=true" />
+				<p:menuitem value="Abonos" icon="pi pi-wallet"
+					action="#{beanGarantia.actionMenuAbono()}" />
+				<p:menuitem value="Registros" icon="pi pi-list"
+					action="#{beanGarantia.actionMenuRegistro()}" />
+			</p:menubar>
+			
+			<p:dataTable value="#{beanGarantia.listaRegistro}" var="reg" paginator="true" rows="10">
+				<p:column headerText="Departamento Id">
+					<h:outputText value="#{reg.depDepartamento.depId}" />
+				</p:column>
+				<p:column headerText="Cliente">
+					<h:outputText value="#{reg.cliCedula}" />
+				</p:column>
+				<p:column headerText="Pago Total">
+					<h:outputText value="#{reg.dacTotalPago}" />
+				</p:column>
+				<p:column headerText="Pago Restante">
+					<h:outputText value="#{reg.dacPagoRestante}" />
+				</p:column>				
+				<p:column headerText="Meses Pagados">
+					<h:outputText value="#{reg.dacMesesPagados}" />
+				</p:column>
+				<p:column headerText="Fecha Inicio">
+					<h:outputText value="#{reg.dacFechaInicio}" />
+				</p:column>
+				<p:column headerText="Fecha Fin">
+					<h:outputText value="#{reg.dacFechaFin}" />
+				</p:column>
+			</p:dataTable>
+			
+			
+		</p:panel>
+
+	</h:form>
+
+</body>
+</html>

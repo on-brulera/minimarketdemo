@@ -1,7 +1,8 @@
 package departamento.model.controlpagos.managers;
 
+import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -22,46 +23,23 @@ import minimarketdemo.model.core.entities.DepServicio;
 import minimarketdemo.model.core.entities.SegUsuario;
 import minimarketdemo.model.core.managers.ManagerDAO;
 
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-
 /**
- * Session Bean implementation class ManagerArriendo
+ * Session Bean implementation class ManagerGarantia
  */
 @Stateless
 @LocalBean
-public class ManagerArriendo {
+public class ManagerGarantia {
 
 	@EJB
 	private ManagerDAO mDAO;
-
-	@PersistenceContext
+	
+    @PersistenceContext
 	EntityManager em;
-
-	public ManagerArriendo() {
-	}
-
-	public List<DepArriendoCabecera> findCabeceras() {
-		TypedQuery<DepArriendoCabecera> cab = em.createQuery("select c from DepArriendoCabecera c",
-				DepArriendoCabecera.class);
-		return cab.getResultList();
-	}
-
-	public List<DepArriendoCabecera> findCabecerasByDepId(int depId) {
-		List<DepArriendoCabecera> datos = findAllCabeceras();
-		List<DepArriendoCabecera> filtrado = new ArrayList<DepArriendoCabecera>();
-
-		for (DepArriendoCabecera da : datos) {			
-			if (da.getDepDepartamento().getDepId() == depId) {
-				filtrado.add(da);
-			}
-		}
-		return filtrado;
-	}
-
-	public List<SegUsuario> findAllClientes() {
+    
+    public ManagerGarantia() {
+    }
+    
+    public List<SegUsuario> findAllClientes() {
 		TypedQuery<SegUsuario> clientes = em
 				.createQuery("select c from SegUsuario c where c.activo=:activo order by c.codigo", SegUsuario.class);
 		boolean activo = false;
@@ -74,11 +52,6 @@ public class ManagerArriendo {
 				"select c from SegUsuario c where c.idSegUsuario=:idSegUsuario order by c.codigo", SegUsuario.class);
 		clientes.setParameter("idSegUsuario", idSegUsuario);
 		return clientes.getResultList();
-	}
-
-	public List<DepClienteDepartamento> findAllClienteDepartamento() {
-		TypedQuery<DepClienteDepartamento> datos= em.createQuery("select c from DepClienteDepartamento c", DepClienteDepartamento.class);
-		return datos.getResultList();
 	}
 	
 	public List<DepDepartamento> findDepartamentobyIdCliente(int idSegUsuario) {
@@ -97,23 +70,15 @@ public class ManagerArriendo {
 		}
 		return depas;
 	}
-
+	
 	public List<DepNombrePago> findAllNombrePagos() {
 		@SuppressWarnings("unchecked")
 		List<DepNombrePago> nombres = mDAO.findAll(DepNombrePago.class, "dnpDescripcion");
 		return nombres;
 	}
-
-	public int calcularHabitantesDepartament(int depId) {
-		List<DepClienteDepartamento> lista = findAllClienteDepartamento();
-		int cont = 0;
-		for (DepClienteDepartamento li : lista) {
-			if (li.getDepDepartamento().getDepId() == depId) {
-				cont++;
-			}
-		}	
-		return cont;
-	}
+	
+	
+	
 	
 	public List<PagoArriendoUnico> calcularDatosArriendoUnico(List<DepDepartamento> depas) throws ParseException {
 
@@ -126,9 +91,8 @@ public class ManagerArriendo {
 
 			PagoArriendoUnico dato = new PagoArriendoUnico();
 			dato.setDepId(dep.getDepId());
-			dato.setDepPrecio(dep.getDepPrecio());
-			String fechaTexto = calcularFechaPago(dep);
-			fechaPago = new SimpleDateFormat("dd/MM/yyyy").parse(fechaTexto);
+			dato.setDepPrecio(dep.getDepPrecio());			
+			fechaPago = new Date();
 			dato.setLimFechaPago(fechaPago);
 			// calcular numero de Personas de un departamento
 			depId = dep.getDepId();
@@ -137,55 +101,14 @@ public class ManagerArriendo {
 					DepClienteDepartamento.class);
 			numClientes.setParameter("depId", depId);
 			dato.setNumClientes(numClientes.getResultList().size());
-			dato.setSerPrecio(calcularTotalServicios(findAllServiciosDepartamentoById(depId)));
-			dato.setTotal((dato.getDepPrecio() * calcularHabitantesDepartament(depId)) + dato.getSerPrecio());
+			dato.setSerPrecio(0);
+			dato.setTotal(dep.getDepGarantia());
 			datos.add(dato);
 		}
 		return datos;
 	}
 
-	private String calcularFechaPago(DepDepartamento dep) {
-		List<DepArriendoCabecera> cab = findCabecerasByDepId(dep.getDepId());
-		int anio = 0;
-		int mes = 0;
-		for (DepArriendoCabecera c : cab) {
-
-			String cadenaFecha = c.getDacFechaFin().toString();
-			String[] arregloFecha = cadenaFecha.split("-");
-			int auxanio = Integer.parseInt(arregloFecha[0]);
-			int auxmes = Integer.parseInt(arregloFecha[1]);
-
-			if (auxanio > anio) {
-				anio = auxanio;
-			}
-
-			if (auxmes > mes) {
-				mes = auxmes;
-			}
-		}
-
-		if (mes == 0 && anio == 0) {
-			Calendar fecha = new GregorianCalendar();
-			anio = fecha.get(Calendar.YEAR);
-			mes = fecha.get(Calendar.MONTH);
-		}
-
-		mes++;
-		if (mes == 13) {
-			mes = 1;
-			anio++;
-		}
-		
-		return dep.getDepDiaPago() + "/" + mes + "/" + anio;
-	}
-
-	private double calcularTotalServicios(List<DepDepartamentoServicio> servicios) {
-		double total = 0;
-		for (DepDepartamentoServicio ser : servicios) {
-			total += (findServiceById(ser.getDepServicio().getSerId())).getSerPrecioBase();
-		}
-		return total;
-	}
+	
 
 	public List<DepDepartamentoServicio> findAllServiciosDepartamentoById(int depId) {
 		TypedQuery<DepDepartamentoServicio> servicios = em.createQuery(
@@ -211,6 +134,49 @@ public class ManagerArriendo {
 		lista.add(depa);
 		return lista;
 	}
+	
+	public List<DepArriendoCabecera> findCabecerasByDepId(int depId) {
+		List<DepArriendoCabecera> datos = findAllCabeceras();
+		List<DepArriendoCabecera> filtrado = new ArrayList<DepArriendoCabecera>();
+
+		for (DepArriendoCabecera da : datos) {			
+			if (da.getDepDepartamento().getDepId() == depId) {
+				filtrado.add(da);
+			}
+		}
+		return filtrado;
+	}
+
+	public List<DepArriendoCabecera> findCabeceras() {
+		TypedQuery<DepArriendoCabecera> cab = em.createQuery("select c from DepArriendoCabecera c",
+				DepArriendoCabecera.class);
+		return cab.getResultList();
+	}
+	
+	public List<DepArriendoCabecera> findAllCabeceras() {
+		TypedQuery<DepArriendoCabecera> cab = em.createQuery("Select r from DepArriendoCabecera r",
+				DepArriendoCabecera.class);
+		return cab.getResultList();
+	}
+	
+	public List<DepArriendoCabecera> findAllRegistrosGarantia() {
+		List<DepArriendoCabecera> lista = findAllCabeceras();
+		List<DepArriendoCabecera> datos = new ArrayList<DepArriendoCabecera>();
+		for (DepArriendoCabecera li : lista) {
+			if (li.getDepNombrePago().getDnpId() == 2) {
+				datos.add(li);
+			}
+		}
+		return datos;
+	}
+	
+	public double totalDepasSeleccionados(List<PagoArriendoUnico> lista) {
+		double total = 0;
+		for (PagoArriendoUnico pagoArriendoUnico : lista) {
+			total += pagoArriendoUnico.getTotal();
+		}
+		return total;
+	}
 
 	public List<PagoArriendoUnico> eliminarDepartamentoPago(List<PagoArriendoUnico> lista, PagoArriendoUnico depa) {
 		for (PagoArriendoUnico li : lista) {
@@ -221,15 +187,8 @@ public class ManagerArriendo {
 		}
 		return lista;
 	}
-
-	public double totalDepasSeleccionados(List<PagoArriendoUnico> lista) {
-		double total = 0;
-		for (PagoArriendoUnico pagoArriendoUnico : lista) {
-			total += pagoArriendoUnico.getTotal();
-		}
-		return total;
-	}
-
+	
+	
 	public void pagarPagoUnico(List<PagoArriendoUnico> lista, double pago, int idSegUsuario, int dnpId) {
 		Date fechaActual = new Date();
 		for (PagoArriendoUnico depa : lista) {
@@ -277,62 +236,12 @@ public class ManagerArriendo {
 		}
 	}
 
-	// ARRIENDO MULTIPLE
-
-	public List<PagoArriendoUnico> calcularDatosArriendoMultiple(List<DepDepartamento> depas, int numMeses)
-			throws ParseException {
-
-		int depId;
-		List<PagoArriendoUnico> datos = new ArrayList<PagoArriendoUnico>();
-
-		for (DepDepartamento dep : depas) {
-
-			PagoArriendoUnico dato = new PagoArriendoUnico();
-			dato.setDepId(dep.getDepId());
-			dato.setDepPrecio(dep.getDepPrecio());
-			// fecha
-			String fechaTexto = calcularFechaPago(dep);
-			Date fechaPago = new SimpleDateFormat("dd/MM/yyyy").parse(fechaTexto);
-			dato.setLimFechaPago(fechaPago);
-			// calcular numero de Personas de un departamento
-			depId = dep.getDepId();
-			TypedQuery<DepClienteDepartamento> numClientes = em.createQuery(
-					"Select r from DepClienteDepartamento r where r.depDepartamento.depId=:depId",
-					DepClienteDepartamento.class);
-			numClientes.setParameter("depId", depId);
-			dato.setNumClientes(numClientes.getResultList().size());
-			dato.setSerPrecio(calcularTotalServicios(findAllServiciosDepartamentoById(depId)));
-			dato.setTotal((dato.getDepPrecio() + dato.getSerPrecio()) * numMeses);
-			datos.add(dato);
-		}
-		return datos;
-	}
-
-	// PARA LOS ABONOS
-
-	public List<DepArriendoCabecera> findAllCabeceras() {
-		TypedQuery<DepArriendoCabecera> cab = em.createQuery("Select r from DepArriendoCabecera r",
-				DepArriendoCabecera.class);
-		return cab.getResultList();
-	}
-	
-	public List<DepArriendoCabecera> findAllRegistrosArriendo() {
-		List<DepArriendoCabecera> lista = findAllCabeceras();
-		List<DepArriendoCabecera> datos = new ArrayList<DepArriendoCabecera>();
-		for (DepArriendoCabecera li : lista) {
-			if (li.getDepNombrePago().getDnpId() == 1) {
-				datos.add(li);
-			}
-		}
-		return datos;
-	}
-
 	public List<DepArriendoCabecera> findListaDeudas() {
 		List<DepArriendoCabecera> lista = findAllCabeceras();
 		List<DepArriendoCabecera> deudas = new ArrayList<DepArriendoCabecera>();
 
 		for (DepArriendoCabecera li : lista) {
-			if (li.getDacPagoRestante() > 0 && li.getDepNombrePago().getDnpId() == 1) {
+			if (li.getDacPagoRestante()  > 0 && li.getDepNombrePago().getDnpId() == 2) {
 				deudas.add(li);
 			}
 		}
@@ -350,4 +259,5 @@ public class ManagerArriendo {
 		em.persist(abono);
 		
 	}
+
 }

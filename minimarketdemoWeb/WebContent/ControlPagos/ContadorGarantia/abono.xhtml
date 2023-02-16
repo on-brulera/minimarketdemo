@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"> 
+
+<h:head>
+	<title>Abono</title>
+</h:head> 
+<body> 
+	<h:form>
+		<p:panel>
+		
+			<p:menubar>
+				<p:menuitem value="Regresar" icon="pi pi-home"
+					action="/menu?faces-redirect=true" />
+				<p:menuitem value="Abonos" icon="pi pi-wallet"
+					action="#{beanGarantia.actionMenuAbono()}" />
+				<p:menuitem value="Registros" icon="pi pi-list"
+					action="#{beanGarantia.actionMenuRegistro()}" />
+			</p:menubar>
+
+			<div style="margin-top: 15px;">
+				<h4>Control de Abono de Garantias</h4>
+			</div>
+			
+			
+			<p:dataTable value="#{beanGarantia.listaDeudas}" var="deu" paginator="true" rows="5">
+			
+				<p:column headerText="Id Departamento">
+					<h:outputText value="#{deu.depDepartamento.depId}" />
+				</p:column>
+				
+				<p:column headerText="Pago Total">
+					<h:outputText value="#{deu.dacTotalPago}" />
+				</p:column>
+				
+				<p:column headerText="Pago Restante">
+					<h:outputText value="#{deu.dacPagoRestante}" />
+				</p:column>							
+				
+				<p:column headerText="Opciones">
+					<p:commandButton value="Seleccionar" actionListener="#{beanGarantia.actionListenerSeleccionarDeuda(deu)}" update="@form"/>
+				</p:column>
+			
+			</p:dataTable>
+			
+			<h3>Deuda Seleccionada</h3>
+						
+			<h:outputText value="ID DEPARTAMENTO:  #{beanGarantia.cabDeudaSeleccionado.depDepartamento.depId}" />
+			
+			<br/>
+			<br/>
+						
+			<h:outputText value="PAGO TOTAL:  #{beanGarantia.cabDeudaSeleccionado.dacTotalPago}" />
+			
+			<br/>
+			<br/>
+			
+			<h:outputText value="PAGO RESTANTE: #{beanGarantia.cabDeudaSeleccionado.dacPagoRestante}" />
+			
+			<br/>
+			<br/>
+			
+			<p:inputText placeholder="CANTIDAD DE ABONO" value="#{beanGarantia.cantidadAbono}"/>			
+			
+			<br/>
+			<br/>
+			
+			<p:commandButton value="Pagar Abono" actionListener="#{beanGarantia.actionListenerPagarAbono()}" update="@form"/>
+			
+			
+		</p:panel>
+	</h:form>
+</body> 
+</html>

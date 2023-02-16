@@ -59,7 +59,7 @@ public class DepArriendoCabecera implements Serializable {
 	private DepNombrePago depNombrePago;
 
 	//bi-directional many-to-one association to DepArriendoDetalle
-	@OneToMany(mappedBy="depArriendoCabecera")
+	@OneToMany(mappedBy="depArriendoCabecera", cascade=CascadeType.ALL)
 	private List<DepArriendoDetalle> depArriendoDetalles;
 
 	public DepArriendoCabecera() {

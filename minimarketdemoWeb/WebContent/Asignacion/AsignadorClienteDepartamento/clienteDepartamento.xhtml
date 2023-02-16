@@ -10,27 +10,33 @@
 	
 	<p:growl>
 		<p:autoUpdate />
-	</p:growl>
-	<h1>ASIGNACIÓN DE CLIENTES A DEPARTAMENTOS</h1>
+	</p:growl>	
 	<h:form>
 				<p:menubar>
 				<p:menuitem value="Regresar" icon="pi pi-home" action="/menu?faces-redirect=true" />
 				</p:menubar>
-				<h:outputText value="Seleccione el Departameto:" />
+				
+				<br></br>
+					<h3>Asignar Clentes a un Deparatamento</h3>
+				<br></br>
+				
+				<h:outputText value="Seleccione el Departameto:"  style="margin-right: 25px;"/>
 				<p:selectOneMenu value="#{beanDcD.id_Dep}">
 					<f:selectItems value="#{beanDcD.listaDepartamentos}" var="d"
 						itemLabel="#{d.depId}" itemValue="#{d.depId}"></f:selectItems>
-				</p:selectOneMenu>
-				<h:outputText value="Seleccionar Cliente:" />
+				</p:selectOneMenu >
+				<h:outputText value="Seleccionar Cliente:" style="margin-right: 25px;margin-left:25px;"/>
 				<p:selectOneMenu value="#{beanDcD.id_Cliente}">
 					<f:selectItems value="#{beanDcD.listaClientes}" var="c"
-						itemLabel="##{c.nombres}" itemValue="#{c.idSegUsuario}"></f:selectItems>
+						itemLabel="Id: #{c.idSegUsuario} - #{c.codigo} - #{c.nombres} #{c.apellidos}" itemValue="#{c.idSegUsuario}"></f:selectItems>
 				</p:selectOneMenu>
-				<h:outputText value="Observaciones:" />
-				<p:inputText value="#{beanDcD.obs}" height="100"></p:inputText>
+				<h:outputText value="Observaciones:" style="margin-right: 25px;margin-left:25px;"/>
+				<p:inputText value="#{beanDcD.obs}" height="100" style="margin-right: 25px;"></p:inputText>
 				<p:commandButton value="Agregar" update="@form"
 					actionListener="#{beanDcD.actionListenerAgregarDTO()}" />
 					
+				<br></br>
+				<br></br>
 				<p:dataTable value="#{beanDcD.listadto}"
 				var="d">
 				<p:column headerText="ID">
@@ -51,8 +57,23 @@
 				</p:column>
 				</p:dataTable>
 				
+				<br></br>
+				<br></br>
+				
 				<p:commandButton value="Guardar" icon="pi pi-save" update="@form" 
 				actionListener="#{beanDcD.actionListenerGuardar()}"></p:commandButton>
+				
+				<br></br>
+				<br></br>
+				
+				<p:dataTable value="#{beanDcD.registro}" var="reg" paginator="true" rows="5">
+					<p:column headerText="Id departamento">
+						<h:outputText value="#{reg.depDepartamento.depId}" />
+					</p:column>
+					<p:column headerText="id del usuario">
+						<h:outputText value="#{reg.idSegUsuario}" />
+					</p:column>
+				</p:dataTable>
 			
 	</h:form>
 	

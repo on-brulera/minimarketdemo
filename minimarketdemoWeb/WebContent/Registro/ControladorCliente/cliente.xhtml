@@ -12,18 +12,23 @@
 		<p:menubar>
 				<p:menuitem value="Regresar" icon="pi pi-home" action="/menu?faces-redirect=true" />
 		</p:menubar>
-		<h1>CONTROL DE CLIENTES</h1>
-		<h:outputText value="CEDULA: " />
-		<p:inputText value="#{beanRegistro.codigo}"></p:inputText>
-		<h:outputText value="APELLIDOS: " />
-		<p:inputText value="#{beanRegistro.apellidos}"></p:inputText>
-		<h:outputText value="NOMBRES: " />
-		<p:inputText value="#{beanRegistro.nombres}"></p:inputText>
-		<h:outputText value="CORREO: " />
-		<p:inputText value="#{beanRegistro.correo}"></p:inputText>
+		<br></br>
+		<h3>CONTROL Y REGISTRO DE CLIENTES</h3>
+		<br></br>
+		<h:outputText value="CEDULA: " style="margin-right:25px;"/>
+		<p:inputText value="#{beanRegistro.codigo}" style="margin-right:25px;"></p:inputText>
+		<h:outputText value="APELLIDOS: " style="margin-right:25px;"/>
+		<p:inputText value="#{beanRegistro.apellidos}" style="margin-right:25px;"></p:inputText>
+		<h:outputText value="NOMBRES: " style="margin-right:25px;"/>
+		<p:inputText value="#{beanRegistro.nombres}" style="margin-right:25px;"></p:inputText>
+		<h:outputText value="CORREO: " style="margin-right:25px;"/>
+		<p:inputText value="#{beanRegistro.correo}" style="margin-right:25px;"></p:inputText>
 		<p:commandButton value="REGISTRAR" update="@form"
 					actionListener="#{beanRegistro.actionListenerAgregarCliente()}" />
 					
+		<br></br>
+		<br></br>
+		<br></br>
 		<p:panel header="Datos Clientes">
 			<p:dataTable value="#{beanRegistro.listaClientes}" var="c"
 				reflow="true">

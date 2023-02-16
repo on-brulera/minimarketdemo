@@ -1,5 +1,6 @@
 package minimarketdemo.model.dep_cliente_departamento.managers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.LocalBean;
@@ -26,8 +27,19 @@ public class ManagerDep_Cliente_Departamento {
 	
 	public List<SegUsuario> findAllCliente() {
         final TypedQuery<SegUsuario> q = (TypedQuery<SegUsuario>)this.em.createQuery("select c from SegUsuario c order by c.idSegUsuario", (Class)SegUsuario.class);
-        return (List<SegUsuario>)q.getResultList();
+        return filtrarCliente((List<SegUsuario>)q.getResultList());
     }
+	
+	public List<SegUsuario> filtrarCliente(List<SegUsuario> lista) {
+		List<SegUsuario> datos = new ArrayList<SegUsuario>();		
+		for (SegUsuario li : lista) {
+			if (li.getActivo() == false) {
+				datos.add(li);
+			}
+		}
+		return datos;
+	}
+	
 	public List<DepDepartamento> findAllDepartamento() {
         final TypedQuery<DepDepartamento> q = (TypedQuery<DepDepartamento>)this.em.createQuery("select c from DepDepartamento c order by c.depId", (Class)DepDepartamento.class);
         return (List<DepDepartamento>)q.getResultList();

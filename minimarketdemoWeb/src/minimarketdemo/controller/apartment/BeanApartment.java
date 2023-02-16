@@ -49,6 +49,10 @@ public class BeanApartment implements Serializable{
 		departamentoEdicion=new DepDepartamento();
 	}
 	
+	public String actionMenu(String ruta) {
+		return ruta + "?faces-redirect=true";
+	}
+	
 	public void actionListenerInsertarDepartamento() throws Exception{
 		try {
 			managerApartment.insertarDepartamento(departamento);

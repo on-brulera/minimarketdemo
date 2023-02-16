@@ -25,6 +25,8 @@
 					action="#{beanArriendo.actionMenuMultiplePago()}" />
 				<p:menuitem value="Abonos" icon="pi pi-wallet"
 					action="#{beanArriendo.actionMenuAbono()}" />
+				<p:menuitem value="Registros" icon="pi pi-list"
+					action="#{beanArriendo.actionMenuRegistro()}" />
 			</p:menubar>
 
 			<div style="margin-top: 15px;">
@@ -55,7 +57,7 @@
 					event="valueChange" update="@form" />
 			</p:selectOneMenu>
 
-			
+			<br></br>
 			
             <h4 style="margin-top:40px;">Departamentos del cliente</h4>
 			<p:dataTable id="menuDepas" value="#{beanArriendo.depasPagar}" var="dep" style="margin-top:25px;">
@@ -118,8 +120,7 @@
 			<h:outputText value="Cantidad de Pago $: " />
 			
 			<h:inputText value="#{beanArriendo.cantidadPago}" style="margin-right:25px;"/>
-			<p:commandButton value="Pagar"/>
-			
+			<p:commandButton value="Pagar" actionListener="#{beanArriendo.actionListenerPagarPagoUnico()}"/>			
 			
 		</h:form>
 	</p:panel>

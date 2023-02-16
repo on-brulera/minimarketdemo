@@ -11,7 +11,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 
 import departamento.model.controlpagos.DTO.PagoArriendoUnico;
-import departamento.model.controlpagos.managers.ManagerArriendo;
+import departamento.model.controlpagos.managers.ManagerGarantia;
 import minimarketdemo.model.core.entities.DepArriendoCabecera;
 import minimarketdemo.model.core.entities.DepDepartamento;
 import minimarketdemo.model.core.entities.DepNombrePago;
@@ -19,142 +19,115 @@ import minimarketdemo.model.core.entities.SegUsuario;
 
 @Named
 @SessionScoped
-public class BeanArriendo implements Serializable {
+public class BeanGarantia implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@EJB
-	private ManagerArriendo managerArriendo;
-
+	private ManagerGarantia managerGarantia;
+	
 	private List<DepNombrePago> nombresPagos;
 	private int dnpId;
 	private List<SegUsuario> clientes;
 	private int idCliente;
 	private List<DepDepartamento> depas;
 	private int depId;
-
-	// lista para el pago unico y multiple
 	private List<PagoArriendoUnico> depasPagar;
 	private List<PagoArriendoUnico> depasSeleccionados;
-	double totalPagar;
-	double cantidadPago;
-
-	// para el pago multiple
-	private int numMeses;
-
-	// para los abonos
-	private List<DepArriendoCabecera> listaDeudas;
-	DepArriendoCabecera cabDeudaSeleccionado;
-	double cantidadAbono;
+	private double totalPagar;
+	private double cantidadPago;
 	
-	//para los registros
+	//para abonos
+	private List<DepArriendoCabecera> listaDeudas;
+	private DepArriendoCabecera cabDeudaSeleccionado;
+	private double cantidadAbono;	
+	
+	//para registros
 	private List<DepArriendoCabecera> listaRegistro;
 	
-	
-	public BeanArriendo() {
-	}
+	public BeanGarantia() {
 
-	// METODOS
+	}
 
 	@PostConstruct
 	public void inicializar() throws ParseException {
-		nombresPagos = managerArriendo.findAllNombrePagos();
-		clientes = managerArriendo.findAllClientes();
+		nombresPagos = managerGarantia.findAllNombrePagos();
+		clientes = managerGarantia.findAllClientes();
 		depasSeleccionados = new ArrayList<PagoArriendoUnico>();
-		totalPagar = managerArriendo.totalDepasSeleccionados(depasSeleccionados);
 		listaDeudas = new ArrayList<DepArriendoCabecera>();
-		cabDeudaSeleccionado = new DepArriendoCabecera();
 		listaRegistro = new ArrayList<DepArriendoCabecera>();
 		if (clientes.size() == 0) {
 			depas = new ArrayList<DepDepartamento>();
 			depasPagar = new ArrayList<PagoArriendoUnico>();
 		} else {
-			depas = managerArriendo.findDepartamentobyIdCliente(clientes.get(0).getIdSegUsuario());
-			depasPagar = managerArriendo.calcularDatosArriendoUnico(depas);
+			depas = managerGarantia.findDepartamentobyIdCliente(clientes.get(0).getIdSegUsuario());
+			depasPagar = managerGarantia.calcularDatosArriendoUnico(depas);
 		}
 	}
-
-	public void reiniciarValores() {
-		clientes = managerArriendo.findAllClientes();
-		depasSeleccionados = new ArrayList<PagoArriendoUnico>();
-		depasPagar = new ArrayList<PagoArriendoUnico>();
-		depas = new ArrayList<DepDepartamento>();
-	}
-
-	// METODOS DE RUTAS
-
+	
+	//MENU RUTAS
+	
 	public String actionMenu(String ruta) {
 		return ruta + "?faces-redirect=true";
 	}
-
-	public String actionMenuUnPago() {
-		reiniciarValores();
-		return "arriendo";
-	}
-
-	public String actionMenuMultiplePago() {
-		reiniciarValores();
-		return "pagomultiple";
-	}
-
+	
 	public String actionMenuAbono() {
-		listaDeudas = managerArriendo.findListaDeudas();
+		listaDeudas = managerGarantia.findListaDeudas();
 		return "abono";
 	}
 	
-	public String actionMenuRegistro() {
-		listaRegistro = managerArriendo.findAllRegistrosArriendo();
-		return "registros";
-	}
-
-	// METODOS PARA EL ARRIENDO DE UN PAGO
-
+	//METODOS DE PAGO GARANTIA
+	
 	public void actionListenerBuscarDepas() throws ParseException {
-		depas = managerArriendo.findDepartamentobyIdCliente(idCliente);
-		depasPagar = managerArriendo.calcularDatosArriendoUnico(depas);
+		depas = managerGarantia.findDepartamentobyIdCliente(idCliente);
+		depasPagar = managerGarantia.calcularDatosArriendoUnico(depas);
 		depasSeleccionados = new ArrayList<PagoArriendoUnico>();
 	}
-
+	
 	public void actionListenerAgregarDepa(PagoArriendoUnico depaSeleccionado) {
-		depasSeleccionados = managerArriendo.añadirDepartamentoPago(depasSeleccionados, depaSeleccionado);
-		totalPagar = managerArriendo.totalDepasSeleccionados(depasSeleccionados);
+		depasSeleccionados = managerGarantia.añadirDepartamentoPago(depasSeleccionados, depaSeleccionado);
+		totalPagar = managerGarantia.totalDepasSeleccionados(depasSeleccionados);
 	}
-
+	
 	public void actionListenerEliminarDepa(PagoArriendoUnico depaSeleccionado) {
-		depasSeleccionados = managerArriendo.eliminarDepartamentoPago(depasSeleccionados, depaSeleccionado);
-		totalPagar = managerArriendo.totalDepasSeleccionados(depasSeleccionados);
+		depasSeleccionados = managerGarantia.eliminarDepartamentoPago(depasSeleccionados, depaSeleccionado);
+		totalPagar = managerGarantia.totalDepasSeleccionados(depasSeleccionados);
 	}
-
-	public double totalPagar() {
-		return managerArriendo.totalDepasSeleccionados(depasSeleccionados);
-	}
-
+	
 	public void actionListenerPagarPagoUnico() {
-		managerArriendo.pagarPagoUnico(depasSeleccionados, cantidadPago, idCliente, dnpId);
+		managerGarantia.pagarPagoUnico(depasSeleccionados, cantidadPago, idCliente, dnpId);
 	}
-
-	// METODOS PARA EL PAGO MULTIPLE
-
-	public void actionListenerBuscarDepasMultiple() {
-		depas = managerArriendo.findDepartamentobyIdCliente(idCliente);
-	}
-
-	public void actionListenerCalcularDatosMultiple() throws ParseException {
-		depasPagar = managerArriendo.calcularDatosArriendoMultiple(depas, numMeses);
-		depasSeleccionados = new ArrayList<PagoArriendoUnico>();
-	}
-
-	// METODOS PARA EL ABONO
-
+	
 	public void actionListenerSeleccionarDeuda(DepArriendoCabecera cab) {
 		this.cabDeudaSeleccionado = cab;
 	}
-
+	
 	public void actionListenerPagarAbono() {
-		managerArriendo.insertarAbono(cabDeudaSeleccionado, cantidadAbono);
+		managerGarantia.insertarAbono(cabDeudaSeleccionado, cantidadAbono);
+	}
+	
+	public String actionMenuRegistro() {
+		listaRegistro = managerGarantia.findAllRegistrosGarantia();
+		return "registros";
+	}
+	
+	//ACCESORES
+
+	public List<DepNombrePago> getNombresPagos() {
+		return nombresPagos;
 	}
 
-	// GETTER AND SETTER
+	public void setNombresPagos(List<DepNombrePago> nombresPagos) {
+		this.nombresPagos = nombresPagos;
+	}
+
+	public int getDnpId() {
+		return dnpId;
+	}
+
+	public void setDnpId(int dnpId) {
+		this.dnpId = dnpId;
+	}
 
 	public List<SegUsuario> getClientes() {
 		return clientes;
@@ -186,22 +159,6 @@ public class BeanArriendo implements Serializable {
 
 	public void setDepId(int depId) {
 		this.depId = depId;
-	}
-
-	public List<DepNombrePago> getNombresPagos() {
-		return nombresPagos;
-	}
-
-	public void setNombresPagos(List<DepNombrePago> nombresPagos) {
-		this.nombresPagos = nombresPagos;
-	}
-
-	public int getDnpId() {
-		return dnpId;
-	}
-
-	public void setDnpId(int dnpId) {
-		this.dnpId = dnpId;
 	}
 
 	public List<PagoArriendoUnico> getDepasPagar() {
@@ -236,14 +193,6 @@ public class BeanArriendo implements Serializable {
 		this.cantidadPago = cantidadPago;
 	}
 
-	public int getNumMeses() {
-		return numMeses;
-	}
-
-	public void setNumMeses(int numMeses) {
-		this.numMeses = numMeses;
-	}
-
 	public List<DepArriendoCabecera> getListaDeudas() {
 		return listaDeudas;
 	}
@@ -274,6 +223,5 @@ public class BeanArriendo implements Serializable {
 
 	public void setListaRegistro(List<DepArriendoCabecera> listaRegistro) {
 		this.listaRegistro = listaRegistro;
-	}
-	
+	}		
 }
