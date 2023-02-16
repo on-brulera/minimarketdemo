@@ -13,6 +13,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import departamento.model.controlpagos.DTO.PagoArriendoUnico;
+import minimarketdemo.model.apartment.managers.ManagerApartment;
 import minimarketdemo.model.core.entities.DepArriendoCabecera;
 import minimarketdemo.model.core.entities.DepArriendoDetalle;
 import minimarketdemo.model.core.entities.DepClienteDepartamento;
@@ -32,6 +33,9 @@ public class ManagerGarantia {
 
 	@EJB
 	private ManagerDAO mDAO;
+	
+	@EJB
+	private ManagerApartment ma;
 	
     @PersistenceContext
 	EntityManager em;
@@ -132,6 +136,7 @@ public class ManagerGarantia {
 			}
 		}
 		lista.add(depa);
+		ma.getDatosAuditoria("insertar");
 		return lista;
 	}
 	
@@ -182,6 +187,7 @@ public class ManagerGarantia {
 		for (PagoArriendoUnico li : lista) {
 			if (li.getDepId() == depa.getDepId()) {
 				lista.remove(li);
+				ma.getDatosAuditoria("eliminar");
 				break;
 			}
 		}
@@ -257,6 +263,7 @@ public class ManagerGarantia {
 		abono.setDadFechaPago(new Date());
 		abono.setDepArriendoCabecera(depArriendoCabecera);
 		em.persist(abono);
+		ma.getDatosAuditoria("insertar");
 		
 	}
 

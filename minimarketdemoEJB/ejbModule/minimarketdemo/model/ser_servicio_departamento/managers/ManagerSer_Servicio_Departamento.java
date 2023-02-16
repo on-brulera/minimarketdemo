@@ -2,6 +2,7 @@ package minimarketdemo.model.ser_servicio_departamento.managers;
 
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -9,6 +10,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import minimarketdemo.model.core.entities.DepDepartamentoServicio;
+import minimarketdemo.model.apartment.managers.ManagerApartment;
 import minimarketdemo.model.core.entities.DepDepartamento;
 import minimarketdemo.model.core.entities.DepServicio;
 import minimarketdemo.model.ser_servicio_departamento.dto.DTOsds;
@@ -21,7 +23,10 @@ import minimarketdemo.model.ser_servicio_departamento.dto.DTOsds;
 public class ManagerSer_Servicio_Departamento {
 	@PersistenceContext
 	private EntityManager em;
-
+	
+	@EJB
+	private ManagerApartment ma;
+	
 	public ManagerSer_Servicio_Departamento() {
 
 	}
@@ -70,6 +75,7 @@ public class ManagerSer_Servicio_Departamento {
 			dcd.setDdsObservacion(obs);
 			em.persist(dcd);
 			em.merge(dep);
+			ma.getDatosAuditoria("insertar");
 		}
 	}
 
