@@ -15,6 +15,7 @@ import javax.inject.Named;
 import minimarketdemo.controller.JSFUtil;
 import minimarketdemo.model.auditoria.managers.ManagerAuditoria;
 import minimarketdemo.model.core.entities.AudBitacora;
+import minimarketdemo.model.core.entities.DepAuditoria;
 import minimarketdemo.model.core.utils.ModelUtil;
 
 @Named
@@ -26,6 +27,8 @@ public class BeanAudBitacora implements Serializable {
 	private List<AudBitacora> listaBitacora;
 	private Date fechaInicio;
 	private Date fechaFin;
+	
+	private List<DepAuditoria> listaAcciones;
 
 	public BeanAudBitacora() {
 
@@ -46,6 +49,16 @@ public class BeanAudBitacora implements Serializable {
 		return "bitacora";
 	}
 
+	public String actionCargarMenuAcciones() {
+		// obtener la fecha de ayer:
+		fechaInicio = ModelUtil.addDays(new Date(), -1);
+		// obtener la fecha de hoy:
+		fechaFin = new Date();
+		listaAcciones = managerAuditoria.findAccionesAuditoria();
+		JSFUtil.crearMensajeINFO("Registros encontrados: " + listaAcciones.size());
+		return "acciones";
+	}
+	
 	public void actionListenerConsultarBitacora() {
 		listaBitacora = managerAuditoria.findBitacoraByFecha(fechaInicio, fechaFin);
 		JSFUtil.crearMensajeINFO("Registros encontrados: " + listaBitacora.size());
@@ -73,6 +86,14 @@ public class BeanAudBitacora implements Serializable {
 
 	public void setFechaFin(Date fechaFin) {
 		this.fechaFin = fechaFin;
+	}
+
+	public List<DepAuditoria> getListaAcciones() {
+		return listaAcciones;
+	}
+
+	public void setListaAcciones(List<DepAuditoria> listaAcciones) {
+		this.listaAcciones = listaAcciones;
 	}
 
 }

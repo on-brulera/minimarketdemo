@@ -248,7 +248,7 @@ public class ManagerArriendo {
 				// List<SegUsuario> cliente = findClienteByidCliente(idSegUsuario);
 				SegUsuario cli = em.find(SegUsuario.class, idSegUsuario);
 				cab.setCliNombres(cli.getNombres() + " " + cli.getApellidos());
-				cab.setCliCedula(cli.getClave());
+				cab.setCliCedula(cli.getCodigo());
 
 				DepDepartamento dep = em.find(DepDepartamento.class, depa.getDepId());
 				cab.setDepDepartamento(dep);

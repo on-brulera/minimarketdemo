@@ -15,6 +15,8 @@
 			<p:menuitem value="Regresar" icon="pi pi-home" action="/menu" />
 			<p:menuitem value="Ver bitácora" icon="pi pi-book"
 				action="#{beanAudBitacora.actionCargarMenuBitacora()}" />
+				<p:menuitem value="Bitácora Acciones" icon="pi pi-book"
+				action="#{beanAudBitacora.actionCargarMenuAcciones()}" />
 			<f:facet name="options">
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
 					icon="pi pi-user">

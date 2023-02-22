@@ -11,6 +11,7 @@ import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import minimarketdemo.model.core.entities.AudBitacora;
+import minimarketdemo.model.core.entities.DepAuditoria;
 import minimarketdemo.model.core.managers.ManagerDAO;
 import minimarketdemo.model.seguridades.dtos.LoginDTO;
 
@@ -86,6 +87,14 @@ public class ManagerAuditoria {
     	Query q=mDAO.getEntityManager().createQuery(consulta, AudBitacora.class);
     	q.setParameter("fechaInicio", new Timestamp(fechaInicio.getTime()));
     	q.setParameter("fechaFin", new Timestamp(fechaFin.getTime()));
+    	return q.getResultList();
+    	
+    }
+    
+    public List<DepAuditoria> findAccionesAuditoria(){
+    	
+    	String consulta="select b from DepAuditoria b";
+    	Query q=mDAO.getEntityManager().createQuery(consulta, DepAuditoria.class);    	
     	return q.getResultList();
     	
     }

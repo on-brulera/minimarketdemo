@@ -8,6 +8,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Table;
 import javax.persistence.TypedQuery;
 
 import minimarketdemo.model.apartment.managers.ManagerApartment;
@@ -24,6 +25,8 @@ public class ManagerDep_Cliente_Departamento {
 	
 	@EJB
 	private ManagerApartment ma=new ManagerApartment();
+	
+	Table tabla=DepClienteDepartamento.class.getAnnotation(Table.class);
 	
 	public ManagerDep_Cliente_Departamento(){
 		
@@ -81,7 +84,7 @@ public class ManagerDep_Cliente_Departamento {
 			dcd.setDcdObservacion(obs);
 			em.persist(dcd);
 			em.merge(dep);
-			ma.getDatosAuditoria("insertar");
+			ma.getDatosAuditoria("insertar", tabla);
     	}
 	}
 
